@@ -1,6 +1,6 @@
 ﻿namespace RealEstate.Domain.Entities
 {
-    internal class UserSaleListing
+    public class UserSaleListing
     {
         public int UserId { get; set; }
         public int ListingId { get; set; }
