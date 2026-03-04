@@ -52,16 +52,19 @@ namespace RealEstate.Infrastructure.Repositories
         public async Task AddAsync(Investment investment)
         {
             await _context.Investments.AddAsync(investment);
+            await _context.SaveChangesAsync();
         }
 
         public void Update(Investment investment)
         {
             _context.Investments.Update(investment);
+            _context.SaveChanges();
         }
 
         public void Delete(Investment investment)
         {
             _context.Investments.Remove(investment);
+            _context.SaveChanges();
         }
     }
 }
