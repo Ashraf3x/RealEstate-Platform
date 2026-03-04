@@ -1,18 +1,13 @@
-﻿using RealEstate.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using RealEstate.Domain.Entities;
 using RealEstate.Domain.Interfaces;
 using RealEstate.Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace RealEstate.Infrastructure.Repositories
 {
-    public class InvestmentRepository:IInvestmentRepository
+    public class InvestmentRepository : IInvestmentRepository
     {
-        private readonly ApplicationDbContext _context; 
-
-        public InvestmentRepository(ApplicationDbContext context)
+        private readonly AppDbContext _context;
+        public InvestmentRepository(AppDbContext context)
         {
             _context = context;
         }
@@ -20,8 +15,8 @@ namespace RealEstate.Infrastructure.Repositories
         public async Task<IEnumerable<Investment>> GetAllAsync()
         {
             return await _context.Investments
-                .Include(i => i.User)       
-                .Include(i => i.Property)  
+                .Include(i => i.User)
+                .Include(i => i.Property)
                 .ToListAsync();
         }
 

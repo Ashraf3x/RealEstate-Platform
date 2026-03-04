@@ -19,7 +19,7 @@ namespace RealEstate.Web
                     "Please define 'ConnectionStrings:DefaultConnection' in configuration (e.g., appsettings.json or environment variables).");
             }
 
-            builder.Services.AddDbContext<RealEstate.Infrastructure.Data.ApplicationDbContext>(options =>
+            builder.Services.AddDbContext<RealEstate.Infrastructure.Data.AppDbContext>(options =>
                 options.UseSqlServer(connectionString));
             builder.Services.AddScoped<IInvestmentRepository, InvestmentRepository>();
             builder.Services.AddScoped<InvestmentService>();

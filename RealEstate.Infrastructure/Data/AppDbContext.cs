@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Diagnostics.Contracts;
+using RealEstate.Domain.Entities;
 
 namespace RealEstate.Infrastructure.Data
 {

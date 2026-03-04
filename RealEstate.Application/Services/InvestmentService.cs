@@ -1,8 +1,5 @@
 ﻿using RealEstate.Domain.Entities;
 using RealEstate.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace RealEstate.Application.Services
 {
@@ -29,7 +26,6 @@ namespace RealEstate.Application.Services
             };
 
             await _investmentRepository.AddAsync(newInvestment);
-            await _investmentRepository.SaveChangesAsync();
             return newInvestment;
         }
 
