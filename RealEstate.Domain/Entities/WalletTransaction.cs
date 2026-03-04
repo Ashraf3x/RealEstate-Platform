@@ -8,11 +8,11 @@ namespace RealEstate.Domain.Entities
 {
     public class WalletTransaction
     {
-        [Key, Column(Order = 0)]
+        [ Column(Order = 0)]
         [ForeignKey("Wallet")]
         public int WalletId { get; set; }
 
-        [Key, Column(Order = 1)]
+        [ Column(Order = 1)]
         public int TransactionId { get; set; }
 
         [MaxLength(50)]

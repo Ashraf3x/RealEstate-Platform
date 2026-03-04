@@ -8,15 +8,15 @@ namespace RealEstate.Domain.Entities
 {
     public class SettledVia
     {
-        [Key, Column(Order = 0)]
+        [ Column(Order = 0)]
         [ForeignKey("SaleListing")]
         public int ListingId { get; set; }
 
-        [Key, Column(Order = 1)]
+        [ Column(Order = 1)]
         [ForeignKey("Wallet")]
         public int WalletId { get; set; }
 
-        [Key, Column(Order = 2)]
+        [ Column(Order = 2)]
         [ForeignKey("WalletTransaction")]
         public int TransactionId { get; set; }
 
