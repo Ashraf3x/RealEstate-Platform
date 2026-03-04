@@ -10,8 +10,17 @@ namespace RealEstate.Web
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            if (string.IsNullOrWhiteSpace(connectionString))
+            {
+                throw new InvalidOperationException(
+                    "The connection string 'DefaultConnection' is not configured. " +
+                    "Please define 'ConnectionStrings:DefaultConnection' in configuration (e.g., appsettings.json or environment variables).");
+            }
+
             builder.Services.AddDbContext<RealEstate.Infrastructure.Data.ApplicationDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(connectionString));
             builder.Services.AddScoped<IInvestmentRepository, InvestmentRepository>();
             builder.Services.AddScoped<InvestmentService>();
             // Add services to the container.
