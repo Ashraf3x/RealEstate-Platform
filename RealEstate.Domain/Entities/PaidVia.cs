@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
-
 namespace RealEstate.Domain.Entities
 {
     public class PaidVia
     {
-        [Key, Column(Order = 0)]
+        [ Column(Order = 0)]
         [ForeignKey("Wallet")]
         public int WalletId { get; set; }
 
-        [Key, Column(Order = 1)]
+        [Column(Order = 1)]
         [ForeignKey("WalletTransaction")]
         public int TransactionId { get; set; }
 

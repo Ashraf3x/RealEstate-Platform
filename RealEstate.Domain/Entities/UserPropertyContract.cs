@@ -5,11 +5,11 @@ namespace RealEstate.Domain.Entities
 {
     public class UserPropertyContract
     {
-        [Key, Column(Order = 0)]
+        [ Column(Order = 0)]
         [ForeignKey("User")]
         public int UserId { get; set; }
 
-        [Key, Column(Order = 1)]
+        [ Column(Order = 1)]
         [ForeignKey("Property")]
         public int PropertyId { get; set; }
 

@@ -1,3 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+using RealEstate.Application.Services;
+using RealEstate.Domain.Interfaces;
+using RealEstate.Infrastructure.Repositories;
+
 namespace RealEstate.Web
 {
     public class Program
@@ -5,7 +10,10 @@ namespace RealEstate.Web
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+            builder.Services.AddDbContext<RealEstate.Infrastructure.Data.ApplicationDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddScoped<IInvestmentRepository, InvestmentRepository>();
+            builder.Services.AddScoped<InvestmentService>();
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
@@ -21,7 +29,6 @@ namespace RealEstate.Web
 
             app.UseHttpsRedirection();
             app.UseRouting();
-
             app.UseAuthorization();
 
             app.MapStaticAssets();
