@@ -29,8 +29,7 @@ namespace RealEstate.Application.Services
             };
 
             await _investmentRepository.AddAsync(newInvestment);
-
-
+            await _investmentRepository.SaveChangesAsync();
             return newInvestment;
         }
 
