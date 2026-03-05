@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using RealEstate.Application.Services;
-using RealEstate.Infrastructure.Repositories;
 using RealEstate.Domain.Interfaces;
+using RealEstate.Infrastructure.Repositories;
 
 namespace RealEstate.Web
 {
@@ -28,7 +28,8 @@ namespace RealEstate.Web
             builder.Services.AddScoped<InvestmentService>();
 
             builder.Services.AddControllersWithViews();
-
+            builder.Services.AddScoped<ISaleListingRepository, SaleListingRepository>();
+            builder.Services.AddScoped<SaleListingService>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
