@@ -1,8 +1,9 @@
-﻿using RealEstate.Infrastructure.Data;
+﻿using RealEstate.Domain.Interfaces;
+using RealEstate.Infrastructure.Data;
 
 namespace RealEstate.Infrastructure.Repositories
 {
-    public class GenericRepository<T> where T : class
+    public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         AppDbContext context;
 

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using RealEstate.Application.Services;
-using RealEstate.Domain.Interfaces;
 using RealEstate.Infrastructure.Repositories;
+using RealEstate.Domain.Interfaces;
 
 namespace RealEstate.Web
 {
@@ -19,11 +19,14 @@ namespace RealEstate.Web
                     "Please define 'ConnectionStrings:DefaultConnection' in configuration (e.g., appsettings.json or environment variables).");
             }
 
-            builder.Services.AddDbContext<RealEstate.Infrastructure.Data.AppDbContext>(options =>
-                options.UseSqlServer(connectionString));
+            builder.Services.AddDbContext<RealEstate.Infrastructure.Data.AppDbContext>(options => options.UseSqlServer(connectionString));
+
+            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
             builder.Services.AddScoped<IInvestmentRepository, InvestmentRepository>();
+
             builder.Services.AddScoped<InvestmentService>();
-            // Add services to the container.
+
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();

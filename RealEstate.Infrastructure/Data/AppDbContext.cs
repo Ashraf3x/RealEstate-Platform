@@ -26,24 +26,36 @@ namespace RealEstate.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<WalletTransaction>().HasKey(wt => wt.TransactionId);
+            modelBuilder.Entity<PaidVia>().HasKey(p => new { p.WalletId, p.TransactionId, p.DistributionId });
+            modelBuilder.Entity<SettledVia>().HasKey(s => new { s.ListingId, s.WalletId, s.TransactionId });
+            modelBuilder.Entity<UserPropertyContract>().HasKey(u => new { u.UserId, u.PropertyId, u.ContractId });
+            modelBuilder.Entity<UserSaleListing>().HasKey(u => new { u.UserId, u.ListingId });
+            modelBuilder.Entity<Purchase>().HasKey(p => p.ListingId);
+            modelBuilder.Entity<Wallet>().HasIndex(w => w.UserId).IsUnique();
+
+            var decimalEntities = new[] {
+            typeof(Investment), typeof(Property), typeof(SaleListing),
+            typeof(Wallet), typeof(WalletTransaction), typeof(YieldDistribution)
+           };
+
+            modelBuilder.Entity<Investment>().Property(i => i.OwnershipPercentage).HasColumnType("decimal(18,2)");
+            modelBuilder.Entity<Property>().Property(p => p.PricePerShare).HasColumnType("decimal(18,2)");
+            modelBuilder.Entity<SaleListing>().Property(s => s.PricePerShare).HasColumnType("decimal(18,2)");
+            modelBuilder.Entity<Wallet>().Property(w => w.Balance).HasColumnType("decimal(18,2)");
+            modelBuilder.Entity<WalletTransaction>().Property(w => w.Amount).HasColumnType("decimal(18,2)");
+            modelBuilder.Entity<YieldDistribution>().Property(y => y.Amount).HasColumnType("decimal(18,2)");
             modelBuilder.Entity<PaidVia>()
-                .HasKey(p => new { p.WalletId, p.TransactionId });
+                .HasOne(p => p.Wallet)
+                .WithMany()
+                .HasForeignKey(p => p.WalletId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<SettledVia>()
-                .HasKey(s => new { s.ListingId, s.WalletId, s.TransactionId });
+                .HasOne(s => s.Wallet).WithMany().HasForeignKey(s => s.WalletId).OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<UserPropertyContract>()
-                .HasKey(u => new { u.UserId, u.PropertyId });
-
-            modelBuilder.Entity<UserSaleListing>()
-                .HasKey(u => new { u.UserId, u.ListingId });
-
-            modelBuilder.Entity<Purchase>()
-                .HasKey(p => p.ListingId);
-
-            modelBuilder.Entity<Wallet>()
-                .HasIndex(w => w.UserId)
-                .IsUnique();
+            modelBuilder.Entity<SettledVia>()
+                .HasOne(s => s.WalletTransaction).WithMany().HasForeignKey(s => s.TransactionId).OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

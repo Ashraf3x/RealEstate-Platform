@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace RealEstate.Domain.Entities
 {
     public class WalletTransaction
     {
-        [ Column(Order = 0)]
+        [Column(Order = 0)]
         [ForeignKey("Wallet")]
         public int WalletId { get; set; }
 
-        [ Column(Order = 1)]
+        [Column(Order = 1)]
+        [Key]
         public int TransactionId { get; set; }
 
         [MaxLength(50)]

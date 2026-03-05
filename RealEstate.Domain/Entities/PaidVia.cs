@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 namespace RealEstate.Domain.Entities
 {
     public class PaidVia
     {
-        [ Column(Order = 0)]
+        [Column(Order = 0)]
         [ForeignKey("Wallet")]
         public int WalletId { get; set; }
 
@@ -16,6 +12,7 @@ namespace RealEstate.Domain.Entities
         public int TransactionId { get; set; }
 
         [ForeignKey("YieldDistribution")]
+        [Column(Order = 2)]
         public int DistributionId { get; set; }
 
         public Wallet Wallet { get; set; }

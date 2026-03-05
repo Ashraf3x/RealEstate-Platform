@@ -2,64 +2,32 @@
 using RealEstate.Domain.Entities;
 using RealEstate.Domain.Interfaces;
 using RealEstate.Infrastructure.Data;
+
 namespace RealEstate.Infrastructure.Repositories
 {
-    public class InvestmentRepository : IInvestmentRepository
+    public class InvestmentRepository : GenericRepository<Investment>, IInvestmentRepository
     {
-        private readonly AppDbContext _context;
-        public InvestmentRepository(AppDbContext context)
+        AppDbContext context;
+
+        public InvestmentRepository(AppDbContext con) : base(con)
         {
-            _context = context;
+            context = con;
         }
 
-        public async Task<IEnumerable<Investment>> GetAllAsync()
+        public List<Investment> GetInvestmentsByUserId(int userId)
         {
-            return await _context.Investments
-                .Include(i => i.User)
-                .Include(i => i.Property)
-                .ToListAsync();
-        }
-
-        public async Task<Investment> GetByIdAsync(int id)
-        {
-            return await _context.Investments
-                .Include(i => i.User)
-                .Include(i => i.Property)
-                .FirstOrDefaultAsync(i => i.InvestmentId == id);
-        }
-
-        public async Task<IEnumerable<Investment>> GetInvestmentsByUserIdAsync(int userId)
-        {
-            return await _context.Investments
+            return context.Investments
                 .Where(i => i.UserId == userId)
                 .Include(i => i.Property)
-                .ToListAsync();
+                .ToList();
         }
 
-        public async Task<IEnumerable<Investment>> GetInvestmentsByPropertyIdAsync(int propertyId)
+        public List<Investment> GetInvestmentsByPropertyId(int propertyId)
         {
-            return await _context.Investments
+            return context.Investments
                 .Where(i => i.PropertyId == propertyId)
                 .Include(i => i.User)
-                .ToListAsync();
-        }
-
-        public async Task AddAsync(Investment investment)
-        {
-            await _context.Investments.AddAsync(investment);
-            await _context.SaveChangesAsync();
-        }
-
-        public void Update(Investment investment)
-        {
-            _context.Investments.Update(investment);
-            _context.SaveChanges();
-        }
-
-        public void Delete(Investment investment)
-        {
-            _context.Investments.Remove(investment);
-            _context.SaveChanges();
+                .ToList();
         }
     }
 }

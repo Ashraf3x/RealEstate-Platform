@@ -5,33 +5,46 @@ namespace RealEstate.Application.Services
 {
     public class InvestmentService
     {
-        private readonly IInvestmentRepository _investmentRepository;
+        IInvestmentRepository repo;
 
-        public InvestmentService(IInvestmentRepository investmentRepository)
+        public InvestmentService(IInvestmentRepository investmentRepo)
         {
-            _investmentRepository = investmentRepository;
+            repo = investmentRepo;
         }
 
-        public async Task<Investment> CreateInvestmentAsync(int userId, int propertyId, int shareCount, decimal totalPropertyShares)
+        public List<Investment> GetAll()
         {
-            decimal ownershipPercentage = (shareCount / totalPropertyShares) * 100;
-
-            var newInvestment = new Investment
-            {
-                UserId = userId,
-                PropertyId = propertyId,
-                ShareCount = shareCount,
-                OwnershipPercentage = ownershipPercentage,
-                PurchasedAt = DateTime.UtcNow
-            };
-
-            await _investmentRepository.AddAsync(newInvestment);
-            return newInvestment;
+            return repo.GetAll();
         }
 
-        public async Task<IEnumerable<Investment>> GetUserPortfolioAsync(int userId)
+        public Investment GetById(int id)
         {
-            return await _investmentRepository.GetInvestmentsByUserIdAsync(userId);
+            return repo.GetById(id);
+        }
+
+        public void Add(Investment investment)
+        {
+            repo.Add(investment);
+        }
+
+        public void Update(Investment investment)
+        {
+            repo.Update(investment);
+        }
+
+        public void Delete(Investment investment)
+        {
+            repo.Delete(investment);
+        }
+
+        public List<Investment> GetByUserId(int userId)
+        {
+            return repo.GetInvestmentsByUserId(userId);
+        }
+
+        public List<Investment> GetByPropertyId(int propertyId)
+        {
+            return repo.GetInvestmentsByPropertyId(propertyId);
         }
     }
 }
