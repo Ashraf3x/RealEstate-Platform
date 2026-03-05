@@ -16,7 +16,7 @@ namespace RealEstate.Domain.Entities
         public decimal Balance { get; set; }
         public DateTime CreatedAt { get; set; }
 
-        public User User { get; set; } // Awating User class implementation
+        public User User { get; set; } 
         public ICollection<WalletTransaction> WalletTransactions { get; set; }
 
     }

@@ -20,7 +20,7 @@ namespace RealEstate.Domain.Entities
 
         public Wallet Wallet { get; set; }
         public WalletTransaction WalletTransaction { get; set; }
-        public YieldDistribution YieldDistribution { get; set; } // Awaiting Yield_Distribution Class to be implemented
+        public YieldDistribution YieldDistribution { get; set; } 
 
     }
 }
