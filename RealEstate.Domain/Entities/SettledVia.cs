@@ -21,7 +21,7 @@ namespace RealEstate.Domain.Entities
         public int TransactionId { get; set; }
 
 
-        public SaleListing SaleListing { get; set; } // Awatiing Sale Listing Class to be implemented
+        public SaleListing SaleListing { get; set; } 
         public Wallet Wallet { get; set; }
         public WalletTransaction WalletTransaction { get; set; }
     }
