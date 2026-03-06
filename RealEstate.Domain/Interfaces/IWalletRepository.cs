@@ -1,20 +1,16 @@
 ﻿using RealEstate.Domain.Entities;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace RealEstate.Domain.Interfaces
 {
-    public interface IWalletRepository
+    public interface IWalletRepository : IGenericRepository<Wallet>
     {
-        Task CreateWallet(Wallet wallet);
-        Task<Wallet> GetWalletById(int walletId);
-        Task<Wallet> GetWalletByUserId(int userId);
-        Task<IEnumerable<Wallet>> GetAllWallets();
-        Task Deposit(int walletId, decimal amount);
-        Task Withdraw(int walletId, decimal amount);
+        Wallet GetWalletByUserId(int userId);
+        void Deposit(int walletId, decimal amount);
+        void Withdraw(int walletId, decimal amount);
 
         // Will be used for pagination and filtering
-        Task<IEnumerable<WalletTransaction>> GetAllTransactions();
-        Task<IEnumerable<WalletTransaction>> GetTransactionsByWalletId(int walletId);
+        List<WalletTransaction> GetAllTransactions();
+        List<WalletTransaction> GetTransactionsByWalletId(int walletId);
     }
 }
