@@ -2,7 +2,6 @@
 using RealEstate.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace RealEstate.Application.Services
 {
@@ -15,57 +14,44 @@ namespace RealEstate.Application.Services
             _walletRepository = walletRepository;
         }
 
-        public async Task CreateWallet(int userId)
+        public List<Wallet> GetAll()
         {
-            var wallet = new Wallet
-            {
-                UserId = userId,
-                Balance = 0,
-                CreatedAt = DateTime.UtcNow
-            };
-
-            await _walletRepository.CreateWallet(wallet);
+            return _walletRepository.GetAll();
         }
 
-        public async Task<Wallet> GetWalletByUserId(int userId)
+        public Wallet GetById(int id)
         {
-            return await _walletRepository.GetWalletByUserId(userId);
+            return _walletRepository.GetById(id);
         }
 
-        public async Task<Wallet> GetWalletById(int walletId)
+        public void Add(Wallet wallet)
         {
-            return await _walletRepository.GetWalletById(walletId);
+            _walletRepository.Add(wallet);
         }
 
-        public async Task<IEnumerable<Wallet>> GetAllWallets()
+        public Wallet GetWalletByUserId(int userId)
         {
-            return await _walletRepository.GetAllWallets();
+            return _walletRepository.GetWalletByUserId(userId);
         }
-
-        public async Task Deposit(int walletId, decimal amount)
+        public void Deposit(int walletId, decimal amount)
         {
             if (amount <= 0)
                 throw new Exception("Deposit amount must be greater than zero");
-
-            await _walletRepository.Deposit(walletId, amount);
+            _walletRepository.Deposit(walletId, amount);
         }
-
-        public async Task Withdraw(int walletId, decimal amount)
+        public void Withdraw(int walletId, decimal amount)
         {
             if (amount <= 0)
                 throw new Exception("Withdrawal amount must be greater than zero");
-
-            await _walletRepository.Withdraw(walletId, amount);
+            _walletRepository.Withdraw(walletId, amount);
         }
-
-        public async Task<IEnumerable<WalletTransaction>> GetTransactionsByWalletId(int walletId)
+        public List<WalletTransaction> GetAllTransactions()
         {
-            return await _walletRepository.GetTransactionsByWalletId(walletId);
+            return _walletRepository.GetAllTransactions();
         }
-
-        public async Task<IEnumerable<WalletTransaction>> GetAllTransactions()
+        public List<WalletTransaction> GetTransactionsByWalletId(int walletId)
         {
-            return await _walletRepository.GetAllTransactions();
+            return _walletRepository.GetTransactionsByWalletId(walletId);
         }
     }
 }
