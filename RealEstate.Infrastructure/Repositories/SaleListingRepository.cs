@@ -13,7 +13,12 @@ namespace RealEstate.Infrastructure.Repositories
         {
             context = con;
         }
-
+        public List<SaleListing> GetAll()
+        {
+            return context.SaleListings
+                .Include(s => s.Property)
+                .ToList();
+        }
         public List<SaleListing> GetListingsByPropertyId(int propertyId)
         {
             return context.SaleListings
