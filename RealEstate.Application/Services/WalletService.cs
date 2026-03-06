@@ -24,8 +24,14 @@ namespace RealEstate.Application.Services
             return _walletRepository.GetById(id);
         }
 
-        public void Add(Wallet wallet)
+        public void CreateWallet(int userId)
         {
+            var wallet = new Wallet
+            {
+                UserId = userId,
+                Balance = 0,
+                CreatedAt = DateTime.UtcNow
+            };
             _walletRepository.Add(wallet);
         }
 

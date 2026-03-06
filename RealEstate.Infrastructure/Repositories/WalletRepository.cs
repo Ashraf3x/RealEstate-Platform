@@ -25,6 +25,8 @@ namespace RealEstate.Infrastructure.Repositories
         public void Deposit(int walletId, decimal amount)
         {
             var wallet = context.Wallets.Find(walletId);
+            if (wallet == null)
+                throw new Exception("Wallet not found");
             wallet.Balance += amount;
             var transaction = new WalletTransaction
             {
@@ -41,6 +43,8 @@ namespace RealEstate.Infrastructure.Repositories
         public void Withdraw(int walletId, decimal amount)
         {
             var wallet = context.Wallets.Find(walletId);
+            if (wallet == null)
+                throw new Exception("Wallet not found");
             if (wallet.Balance < amount)
                 throw new Exception("Insufficient Balance");
             wallet.Balance -= amount;
