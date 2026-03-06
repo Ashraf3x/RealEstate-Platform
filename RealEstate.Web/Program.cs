@@ -30,6 +30,8 @@ namespace RealEstate.Web
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<ISaleListingRepository, SaleListingRepository>();
             builder.Services.AddScoped<SaleListingService>();
+            builder.Services.AddScoped<IPropertyRepository, PropertyRepository>();
+            builder.Services.AddScoped<PropertyService>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
