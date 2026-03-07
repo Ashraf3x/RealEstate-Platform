@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using RealEstate.Application.DTOs;
 using RealEstate.Application.Services;
 using RealEstate.Domain.Entities;
@@ -8,8 +9,10 @@ namespace RealEstate.Web.Controllers
     public class InvestmentsController : Controller
     {
         private readonly InvestmentService _investmentService;
-        public InvestmentsController(InvestmentService investmentService) {
+        private readonly PropertyService _propertyService;
+        public InvestmentsController(InvestmentService investmentService,PropertyService propertyService) {
             this._investmentService = investmentService;
+            this._propertyService = propertyService;
         }
         public IActionResult Index()
         {
@@ -41,6 +44,12 @@ namespace RealEstate.Web.Controllers
             };
             return View(investmentDto);
         }
+        [HttpGet]
+        public IActionResult Create() { 
+            var properties= _propertyService.GetAll().ToList();
+            ViewBag.Properties = new SelectList(properties);
+            return View();
+        }
         [HttpPost]
         public IActionResult Create(CreateInvestmentDto createInvestmentDto) {
 
@@ -61,7 +70,43 @@ namespace RealEstate.Web.Controllers
 
             return View(createInvestmentDto);
         }
-
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var investment=_investmentService.GetById(id);
+            if (investment == null) {
+                return NotFound();
+            }
+            var investmentDto = new InvestmentDto
+            {
+                InvestmentId = investment.InvestmentId,
+                ShareCount = investment.ShareCount,
+                OwnershipPercentage = investment.OwnershipPercentage,
+                PurchasedAt = investment.PurchasedAt,
+                UserName=investment.User.FirstName+" "+investment.User.LastName,
+                PropertyName=investment.Property.Title
+            };
+            return View("~/Views/Admin/Investments/Edit.cshtml", investmentDto);
+        }
+        [HttpPost]
+        public IActionResult Edit(int id,InvestmentDto investmentDto) {
+            if (id != investmentDto.InvestmentId)
+            {
+                return BadRequest();
+            }
+            if (ModelState.IsValid) {
+                var investment = _investmentService.GetById(id);
+                if (investment == null)
+                {
+                    return NotFound();
+                }
+                investment.ShareCount = investmentDto.ShareCount;
+                investment.OwnershipPercentage = (investmentDto.ShareCount / 1000m) * 100;
+                _investmentService.Update(investment);
+                return RedirectToAction("Index");
+            }
+            return View("~/Views/Admin/Investments/Edit.cshtml", investmentDto);
+        }
         [HttpGet]
         public IActionResult Delete(int id) { 
             var investment=_investmentService.GetById(id);
@@ -125,5 +170,6 @@ namespace RealEstate.Web.Controllers
             }).ToList();
             return View(investmentsDtos);
         }
+         
     }
 }
