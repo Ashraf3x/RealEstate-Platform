@@ -6,11 +6,11 @@ namespace RealEstate.Application.DTOs
 {
     public class InvestmentDto
     {
-        public int InvestmentId;
-        public string UserName;
-        public string PropertyName;
-        public int ShareCount;
-        public decimal OwnershipPercentage;
-        public DateTime PurchasedAt;
+        public int InvestmentId { set; get; }
+        public string UserName { set; get; }
+        public string PropertyName { set; get; }
+        public int ShareCount { set; get; }
+        public decimal OwnershipPercentage { set; get; }
+        public DateTime PurchasedAt { set; get; }
     }
 }
