@@ -29,6 +29,10 @@ namespace RealEstate.Web
 
             builder.Services.AddScoped<InvestmentService>();
 
+            builder.Services.AddScoped<IWalletRepository, WalletRepository>();
+
+            builder.Services.AddScoped<WalletService>();
+
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<ISaleListingRepository, SaleListingRepository>();
             builder.Services.AddScoped<SaleListingService>();
