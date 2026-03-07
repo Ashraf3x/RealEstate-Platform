@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using RealEstate.Application.DTOs;
 using RealEstate.Application.Services;
 using RealEstate.Domain.Entities;
@@ -8,10 +9,11 @@ namespace RealEstate.Web.Controllers
     public class UsersController : Controller
     {
         UserService service;
-
-        public UsersController(UserService userService)
+        UserManager<User> manager;
+        public UsersController(UserService userService, UserManager<User> userManager)
         {
             service = userService;
+            manager = userManager;
         }
 
         public IActionResult Index()
@@ -19,7 +21,7 @@ namespace RealEstate.Web.Controllers
             var users = service.GetAll();
             var result = users.Select(u => new UserDto
             {
-                UserId = u.UserId,
+                UserId = u.Id,
                 FirstName = u.FirstName,
                 LastName = u.LastName,
                 Email = u.Email,
@@ -36,7 +38,7 @@ namespace RealEstate.Web.Controllers
             if (user == null) return NotFound();
             var result = new UserDto
             {
-                UserId = user.UserId,
+                UserId = user.Id,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
@@ -53,20 +55,38 @@ namespace RealEstate.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(CreateUserDto dto)
+        public async Task<IActionResult> Create(CreateUserDto dto)
         {
+
+            if (!ModelState.IsValid) return View(dto);
+
             var user = new User
             {
+                UserName = dto.Email,
+                Email = dto.Email,
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
-                Email = dto.Email,
-                Password = dto.Password,
                 Role = dto.Role,
                 IsActive = true,
                 CreatedAt = DateTime.Now
             };
-            service.Add(user);
-            return RedirectToAction("Index");
+
+            var result = await manager.CreateAsync(user, dto.Password);
+
+            if (result.Succeeded)
+            {
+                if (!string.IsNullOrEmpty(dto.Role))
+                {
+                    await manager.AddToRoleAsync(user, dto.Role);
+                }
+
+                return RedirectToAction("Index");
+            }
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+            return View(dto);
         }
 
         public IActionResult Edit(int id)
@@ -75,7 +95,7 @@ namespace RealEstate.Web.Controllers
             if (user == null) return NotFound();
             var result = new UserDto
             {
-                UserId = user.UserId,
+                UserId = user.Id,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,

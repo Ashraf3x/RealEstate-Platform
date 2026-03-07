@@ -10,27 +10,30 @@ namespace RealEstate.Web.Controllers
     {
         private readonly InvestmentService _investmentService;
         private readonly PropertyService _propertyService;
-        public InvestmentsController(InvestmentService investmentService,PropertyService propertyService) {
+        public InvestmentsController(InvestmentService investmentService, PropertyService propertyService)
+        {
             this._investmentService = investmentService;
             this._propertyService = propertyService;
         }
         public IActionResult Index()
         {
-            var investmentsDtos= _investmentService.GetAll().Select(i=>new InvestmentDto
+            var investmentsDtos = _investmentService.GetAll().Select(i => new InvestmentDto
             {
-                InvestmentId=i.InvestmentId,
-                UserName=i.User.FirstName+" "+i.User.LastName,
-                ShareCount=i.ShareCount,
-                OwnershipPercentage=i.OwnershipPercentage,
-                PropertyName=i.Property.Title,
-                PurchasedAt=i.PurchasedAt,
+                InvestmentId = i.InvestmentId,
+                UserName = i.User.FirstName + " " + i.User.LastName,
+                ShareCount = i.ShareCount,
+                OwnershipPercentage = i.OwnershipPercentage,
+                PropertyName = i.Property.Title,
+                PurchasedAt = i.PurchasedAt,
 
             }).ToList();
             return View(investmentsDtos);
         }
-        public IActionResult Details(int id) { 
-            var investment=_investmentService.GetById(id);
-            if (investment == null) {
+        public IActionResult Details(int id)
+        {
+            var investment = _investmentService.GetById(id);
+            if (investment == null)
+            {
                 return NotFound();
             }
             var investmentDto = new InvestmentDto
@@ -45,15 +48,18 @@ namespace RealEstate.Web.Controllers
             return View(investmentDto);
         }
         [HttpGet]
-        public IActionResult Create() { 
-            var properties= _propertyService.GetAll().ToList();
+        public IActionResult Create()
+        {
+            var properties = _propertyService.GetAll().ToList();
             ViewBag.Properties = new SelectList(properties);
             return View();
         }
         [HttpPost]
-        public IActionResult Create(CreateInvestmentDto createInvestmentDto) {
+        public IActionResult Create(CreateInvestmentDto createInvestmentDto)
+        {
 
-            if (ModelState.IsValid) {
+            if (ModelState.IsValid)
+            {
                 var investment = new Investment
                 {
                     UserId = createInvestmentDto.UserId,
@@ -73,8 +79,9 @@ namespace RealEstate.Web.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var investment=_investmentService.GetById(id);
-            if (investment == null) {
+            var investment = _investmentService.GetById(id);
+            if (investment == null)
+            {
                 return NotFound();
             }
             var investmentDto = new InvestmentDto
@@ -83,18 +90,20 @@ namespace RealEstate.Web.Controllers
                 ShareCount = investment.ShareCount,
                 OwnershipPercentage = investment.OwnershipPercentage,
                 PurchasedAt = investment.PurchasedAt,
-                UserName=investment.User.FirstName+" "+investment.User.LastName,
-                PropertyName=investment.Property.Title
+                UserName = investment.User.FirstName + " " + investment.User.LastName,
+                PropertyName = investment.Property.Title
             };
             return View("~/Views/Admin/Investments/Edit.cshtml", investmentDto);
         }
         [HttpPost]
-        public IActionResult Edit(int id,InvestmentDto investmentDto) {
+        public IActionResult Edit(int id, InvestmentDto investmentDto)
+        {
             if (id != investmentDto.InvestmentId)
             {
                 return BadRequest();
             }
-            if (ModelState.IsValid) {
+            if (ModelState.IsValid)
+            {
                 var investment = _investmentService.GetById(id);
                 if (investment == null)
                 {
@@ -108,9 +117,11 @@ namespace RealEstate.Web.Controllers
             return View("~/Views/Admin/Investments/Edit.cshtml", investmentDto);
         }
         [HttpGet]
-        public IActionResult Delete(int id) { 
-            var investment=_investmentService.GetById(id);
-            if (investment == null) {
+        public IActionResult Delete(int id)
+        {
+            var investment = _investmentService.GetById(id);
+            if (investment == null)
+            {
                 return NotFound();
             }
             var investmentDto = new InvestmentDto
@@ -126,7 +137,8 @@ namespace RealEstate.Web.Controllers
             return View(investmentDto);
         }
         [HttpPost, ActionName("Delete")]
-        public IActionResult DeleteConfirm(int id) {
+        public IActionResult DeleteConfirm(int id)
+        {
             var investment = _investmentService.GetById(id);
             if (investment == null)
             {
@@ -135,13 +147,14 @@ namespace RealEstate.Web.Controllers
             _investmentService.Delete(investment);
             return RedirectToAction("Index");
         }
-        public IActionResult GetByUserId(int userId) {
+        public IActionResult GetByUserId(int userId)
+        {
             var investments = _investmentService.GetByUserId(userId);
-            if(investments == null)
+            if (investments == null)
             {
-                return NotFound(); 
+                return NotFound();
             }
-            var investmentsDtos=investments.Select(i => new InvestmentDto
+            var investmentsDtos = investments.Select(i => new InvestmentDto
             {
                 InvestmentId = i.InvestmentId,
                 UserName = i.User.FirstName + " " + i.User.LastName,
@@ -152,11 +165,12 @@ namespace RealEstate.Web.Controllers
             }).ToList();
             return View(investmentsDtos);
         }
-        public IActionResult GetByPropertyId(int propertyId) {
+        public IActionResult GetByPropertyId(int propertyId)
+        {
             var investments = _investmentService.GetByPropertyId(propertyId);
             if (investments == null)
             {
-                return NotFound(); 
+                return NotFound();
             }
 
             var investmentsDtos = investments.Select(i => new InvestmentDto
@@ -170,6 +184,6 @@ namespace RealEstate.Web.Controllers
             }).ToList();
             return View(investmentsDtos);
         }
-         
+
     }
 }

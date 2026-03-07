@@ -1,13 +1,15 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RealEstate.Application.Services;
+using RealEstate.Domain.Entities;
 using RealEstate.Domain.Interfaces;
+using RealEstate.Infrastructure.Data;
 using RealEstate.Infrastructure.Repositories;
-
 namespace RealEstate.Web
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -34,8 +36,27 @@ namespace RealEstate.Web
             builder.Services.AddScoped<PropertyService>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<UserService>();
-            var app = builder.Build();
+            builder.Services.AddIdentity<User, IdentityRole<int>>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 8;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+            }).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 
+            var app = builder.Build();
+            using (var scope = app.Services.CreateScope())
+            {
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<int>>>();
+                string[] roleNames = { "Admin", "User", "Guest" };
+                foreach (var roleName in roleNames)
+                {
+                    if (!await roleManager.RoleExistsAsync(roleName))
+                    {
+                        await roleManager.CreateAsync(new IdentityRole<int>(roleName));
+                    }
+                }
+            }
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
@@ -46,14 +67,14 @@ namespace RealEstate.Web
 
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapStaticAssets();
             app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}")
-                .WithStaticAssets();
-
+              name: "default",
+              pattern: "{controller=Account}/{action=Login}/{id?}")
+              .WithStaticAssets();
             app.Run();
         }
     }
