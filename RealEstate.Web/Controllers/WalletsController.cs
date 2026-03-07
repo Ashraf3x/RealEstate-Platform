@@ -4,11 +4,11 @@ using RealEstate.Application.Services;
 
 namespace RealEstate.Web.Controllers
 {
-    public class WalletController : Controller
+    public class WalletsController : Controller
     {
         WalletService walletService;
 
-        public WalletController(WalletService walletService)
+        public WalletsController(WalletService walletService)
         {
             this.walletService = walletService;
         }
@@ -59,6 +59,12 @@ namespace RealEstate.Web.Controllers
         public IActionResult Withdraw(int walletId)
         {
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult Withdraw(int walletId, decimal amount) {
+            walletService.Withdraw(walletId, amount);
+            return RedirectToAction("Index");
         }
 
         public IActionResult GetTransactions(int walletId)
