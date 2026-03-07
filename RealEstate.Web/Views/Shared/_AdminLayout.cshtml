@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - PropVest</title>
+    <title>@ViewData["Title"] - PropVest Admin</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -15,7 +15,7 @@
         <!-- Top Header -->
         <div class="d-flex justify-content-between align-items-center mb-3 p-3 bg-white rounded shadow-sm">
             <a class="text-dark text-decoration-none fw-bold fs-5" asp-controller="Home" asp-action="Index">
-                PropVest
+                PropVest Admin
             </a>
             <div class="d-flex align-items-center gap-3">
                 <button class="btn d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mobileSidebar">
@@ -29,24 +29,28 @@
         <!-- Mobile Sidebar Dropdown -->
         <div class="collapse d-md-none mb-3 bg-white rounded shadow-sm p-3" id="mobileSidebar">
             <a class="d-block p-2 text-dark text-decoration-none" asp-controller="Home" asp-action="Index">Dashboard</a>
-            <a class="d-block p-2 text-dark text-decoration-none" asp-controller="Profile" asp-action="Index">Profile</a>
-            <a class="d-block p-2 text-dark text-decoration-none" asp-controller="Wallets" asp-action="Index">Wallet</a>
-            <a class="d-block p-2 text-dark text-decoration-none" asp-controller="Properties" asp-action="Index">Properties</a>
-            <a class="d-block p-2 text-dark text-decoration-none" asp-controller="Investments" asp-action="Index">Portfolio</a>
+            <a class="d-block p-2 text-dark text-decoration-none" asp-controller="Users" asp-action="Index">User Management</a>
+            <a class="d-block p-2 text-dark text-decoration-none" asp-controller="Kyc" asp-action="Index">KYC Management</a>
+            <a class="d-block p-2 text-dark text-decoration-none" asp-controller="Properties" asp-action="Index">Property Management</a>
+            <a class="d-block p-2 text-dark text-decoration-none" asp-controller="Investments" asp-action="Index">Investments</a>
+            <a class="d-block p-2 text-dark text-decoration-none" asp-controller="Financial" asp-action="Index">Financial</a>
             <a class="d-block p-2 text-dark text-decoration-none" asp-controller="SaleListings" asp-action="Index">Marketplace</a>
+            <a class="d-block p-2 text-dark text-decoration-none" asp-controller="Settings" asp-action="Index">Settings</a>
         </div>
 
         <!-- Body -->
         <div class="d-flex gap-3 align-items-start">
 
-            <!-- Sidebar - only visible on desktop -->
+            <!-- Sidebar -->
             <div class="bg-white rounded shadow-sm p-3 d-none d-md-block" style="min-width: 200px;">
                 <a class="d-block p-2 text-dark text-decoration-none" asp-controller="Home" asp-action="Index">Dashboard</a>
-                <a class="d-block p-2 text-dark text-decoration-none" asp-controller="Profile" asp-action="Index">Profile</a>
-                <a class="d-block p-2 text-dark text-decoration-none" asp-controller="Wallets" asp-action="Index">Wallet</a>
-                <a class="d-block p-2 text-dark text-decoration-none" asp-controller="Properties" asp-action="Index">Properties</a>
-                <a class="d-block p-2 text-dark text-decoration-none" asp-controller="Investments" asp-action="Index">Portfolio</a>
+                <a class="d-block p-2 text-dark text-decoration-none" asp-controller="Users" asp-action="Index">User Management</a>
+                <a class="d-block p-2 text-dark text-decoration-none" asp-controller="Kyc" asp-action="Index">KYC Management</a>
+                <a class="d-block p-2 text-dark text-decoration-none" asp-controller="Properties" asp-action="Index">Property Management</a>
+                <a class="d-block p-2 text-dark text-decoration-none" asp-controller="Investments" asp-action="Index">Investments</a>
+                <a class="d-block p-2 text-dark text-decoration-none" asp-controller="Financial" asp-action="Index">Financial</a>
                 <a class="d-block p-2 text-dark text-decoration-none" asp-controller="SaleListings" asp-action="Index">Marketplace</a>
+                <a class="d-block p-2 text-dark text-decoration-none" asp-controller="Settings" asp-action="Index">Settings</a>
             </div>
 
             <!-- Main Content -->
