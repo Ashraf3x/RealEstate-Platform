@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RealEstate.Application.DTOs;
 using RealEstate.Application.Services;
+using System.Security.Claims;
 
 namespace RealEstate.Web.Controllers
 {
+    [Authorize]
     public class WalletsController : Controller
     {
         WalletService walletService;
@@ -14,7 +17,7 @@ namespace RealEstate.Web.Controllers
         }
         public IActionResult Index()
         {
-            var userId = 1; // Placeholder until auth
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
             var wallet = walletService.GetWalletByUserId(userId);
             if (wallet == null) {
                 return NotFound();
@@ -46,26 +49,32 @@ namespace RealEstate.Web.Controllers
 
         public IActionResult Deposit(int walletId)
         {
-            ViewBag.WalletId = walletId;
-            return View();
+            var model = new DepositDto { WalletId = walletId };
+            return View(model);
         }
 
         [HttpPost]
-        public IActionResult Deposit(int walletId, decimal amount)
+        public IActionResult Deposit(DepositDto model)
         {
-            walletService.Deposit(walletId, amount);
+            if (model.Amount <= 0) {
+                return BadRequest("Amount must be greater than zero");
+            }
+            walletService.Deposit(model.WalletId, model.Amount);
             return RedirectToAction("Index");
         }
 
         public IActionResult Withdraw(int walletId)
         {
-            ViewBag.WalletId = walletId;
-            return View();
+            var model = new WithdrawDto { WalletId = walletId };
+            return View(model);
         }
 
         [HttpPost]
-        public IActionResult Withdraw(int walletId, decimal amount) {
-            walletService.Withdraw(walletId, amount);
+        public IActionResult Withdraw(WithdrawDto model) {
+            if (model.Amount <= 0) {
+                return BadRequest("Amount must be greater zero");
+            }
+            walletService.Withdraw(model.WalletId, model.Amount);
             return RedirectToAction("Index");
         }
 
@@ -84,6 +93,7 @@ namespace RealEstate.Web.Controllers
         }
 
         [Route("Admin/Wallets/Index")]
+        [Authorize(Roles = "Admin")]
         public IActionResult GetAllWallets()
         {
             var wallets = walletService.GetAll();
@@ -98,6 +108,7 @@ namespace RealEstate.Web.Controllers
         }
 
         [Route("Admin/Wallets/Transactions")]
+        [Authorize(Roles = "Admin")]
         public IActionResult GetAllTransactions()
         {
             var transactions = walletService.GetAllTransactions();

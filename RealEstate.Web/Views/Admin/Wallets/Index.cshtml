@@ -8,25 +8,32 @@
 <div class="bg-white rounded shadow-sm p-4">
     <h4>All Wallets</h4>
     <hr />
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Wallet ID</th>
-                <th>User ID</th>
-                <th>Balance</th>
-                <th>Created At</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var wallet in Model)
-            {
+    @if (Model?.Any() == true)
+    {
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>@wallet.WalletId</td>
-                    <td>@wallet.UserId</td>
-                    <td>@wallet.Balance EGP</td>
-                    <td>@wallet.CreatedAt</td>
+                    <th>Wallet ID</th>
+                    <th>User ID</th>
+                    <th>Balance</th>
+                    <th>Created At</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var wallet in Model)
+                {
+                    <tr>
+                        <td>@wallet.WalletId</td>
+                        <td>@wallet.UserId</td>
+                        <td>@wallet.Balance EGP</td>
+                        <td>@wallet.CreatedAt</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No wallets found.</p>
+    }
 </div>

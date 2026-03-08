@@ -1,4 +1,6 @@
-﻿@{
+﻿@model RealEstate.Application.DTOs.DepositDto
+
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Deposit";
 }
@@ -6,11 +8,12 @@
 <div class="bg-white rounded shadow-sm p-4">
     <h4>Deposit</h4>
     <hr />
-    <form method="post" asp-action="Deposit" asp-route-walletId="@ViewBag.WalletId">
-        <input type="hidden" name="walletId" value="@ViewBag.WalletId" />
+    <form method="post" asp-action="Deposit">
+        <input type="hidden" asp-for="WalletId" />
         <div class="mb-3">
-            <label class="form-label">Amount</label>
-            <input type="number" class="form-control" name="amount" min="1" required />
+            <label asp-for="Amount" class="form-label">Amount (EGP)</label>
+            <input type="number" asp-for="Amount" class="form-control" min="0.01" step="0.01" required />
+            <span asp-validation-for="Amount" class="text-danger"></span>
         </div>
         <button type="submit" class="btn btn-success">Deposit</button>
         <a class="btn btn-secondary" asp-action="Index">Cancel</a>

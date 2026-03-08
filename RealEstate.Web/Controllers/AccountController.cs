@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RealEstate.Application.DTOs;
+using RealEstate.Application.Services;
 using RealEstate.Domain.Entities;
 
 namespace RealEstate.Web.Controllers
@@ -9,11 +10,14 @@ namespace RealEstate.Web.Controllers
     {
         UserManager<User> userManager;
         SignInManager<User> signInManager;
+        // Wallet Creation in Account
+        WalletService walletService;
 
-        public AccountController(UserManager<User> user, SignInManager<User> sign)
+        public AccountController(UserManager<User> user, SignInManager<User> sign, WalletService service)
         {
             userManager = user;
             signInManager = sign;
+            walletService = service;
         }
 
         [HttpGet]
@@ -63,6 +67,7 @@ namespace RealEstate.Web.Controllers
 
             if (result.Succeeded)
             {
+                walletService.CreateWallet(user.Id);
                 await userManager.AddToRoleAsync(user, "User");
                 await signInManager.SignInAsync(user, false);
                 return RedirectToAction("Index", "SaleListings");
