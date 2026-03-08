@@ -14,12 +14,12 @@ namespace RealEstate.Application.Services
 
         public List<Investment> GetAll()
         {
-            return repo.GetAll();
+            return repo.GetAllWithDetails();
         }
 
         public Investment GetById(int id)
         {
-            return repo.GetById(id);
+            return repo.GetByIdWithDetails(id);
         }
 
         public void Add(Investment investment)

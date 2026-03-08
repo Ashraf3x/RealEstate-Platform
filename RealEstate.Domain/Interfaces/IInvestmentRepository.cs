@@ -6,5 +6,7 @@ namespace RealEstate.Domain.Interfaces
     {
         List<Investment> GetInvestmentsByUserId(int userId);
         List<Investment> GetInvestmentsByPropertyId(int propertyId);
+        List<Investment> GetAllWithDetails();
+        Investment GetByIdWithDetails(int id);
     }
 }

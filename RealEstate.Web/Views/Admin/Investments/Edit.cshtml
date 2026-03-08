@@ -1,0 +1,49 @@
+﻿@model RealEstate.Application.DTOs.InvestmentDto
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Edit Investment";
+}
+
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-5">
+                    <h4 class="fw-bold mb-4">Edit Investment #@Model.InvestmentId</h4>
+
+                    <div class="alert alert-info border-0 mb-4">
+                        <strong>Investor:</strong> @Model.UserName <br />
+                        <strong>Property:</strong> @Model.PropertyName
+                    </div>
+
+                    <form asp-action="Edit" method="post">
+                        <input type="hidden" asp-for="InvestmentId" />
+
+                        <input type="hidden" asp-for="UserName" />
+                        <input type="hidden" asp-for="PropertyName" />
+                        <input type="hidden" asp-for="OwnershipPercentage" />
+                        <input type="hidden" asp-for="PurchasedAt" />
+
+                        <div class="mb-4">
+                            <label asp-for="ShareCount" class="form-label fw-semibold">Adjust Share Count</label>
+                            <input asp-for="ShareCount" class="form-control" type="number" min="1" />
+                            <span asp-validation-for="ShareCount" class="text-danger small"></span>
+                            <div class="form-text mt-2"><i class="bi bi-info-circle me-1"></i>Ownership percentage will be automatically recalculated based on the new shares.</div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-warning flex-grow-1 text-dark fw-bold">Save Changes</button>
+                            <a asp-action="AdminIndex" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

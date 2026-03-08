@@ -1,0 +1,47 @@
+﻿@model RealEstate.Application.DTOs.CreateInvestmentDto
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "New Investment";
+}
+
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-5">
+                    <h4 class="fw-bold mb-1">Invest in Property</h4>
+                    <p class="text-muted mb-4">Purchase shares in a new property</p>
+
+                    <form asp-action="Create" method="post">
+                        <input type="hidden" asp-for="UserId" value="1" />
+
+                        <div class="mb-3">
+                            <label asp-for="PropertyId" class="form-label fw-semibold">Select Property</label>
+                            <select asp-for="PropertyId" asp-items="ViewBag.Properties" class="form-select">
+                                <option value="">-- Choose a Property --</option>
+                            </select>
+                            <span asp-validation-for="PropertyId" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="ShareCount" class="form-label fw-semibold">Number of Shares</label>
+                            <input asp-for="ShareCount" class="form-control" type="number" min="1" />
+                            <span asp-validation-for="ShareCount" class="text-danger small"></span>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-success flex-grow-1">Confirm Investment</button>
+                            <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

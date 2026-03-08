@@ -60,6 +60,31 @@ namespace RealEstate.Infrastructure.Data
             modelBuilder.Entity<SettledVia>()
                 .HasOne(s => s.WalletTransaction).WithMany()
                 .HasForeignKey(s => s.TransactionId).OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Property>().HasData(
+        new Property
+        {
+            PropertyId = 1,
+            Title = "Smart Apartment in New Cairo",
+            Description = "A modern smart apartment with 3D viewing.",
+            PricePerShare = 50m, 
+            TotalShares = 1000,
+            Location = "New Cairo",
+            Status = "Active",
+            CreatedAt = new DateTime(2026, 3, 1, 0, 0, 0, DateTimeKind.Utc) 
+        },
+        new Property
+        {
+            PropertyId = 2,
+            Title = "Fractional Real Estate Office",
+            Description = "Premium office space in the administrative capital.",
+            PricePerShare = 100m,
+            TotalShares = 500,
+            Location = "New Capital",
+            Status = "Active",
+            CreatedAt = new DateTime(2026, 3, 5, 0, 0, 0, DateTimeKind.Utc)
+        }
+    );
         }
     }
 }
