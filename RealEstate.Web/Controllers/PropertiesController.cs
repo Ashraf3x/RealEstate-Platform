@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RealEstate.Application.DTOs;
 using RealEstate.Application.Services;
 using RealEstate.Domain.Entities;
@@ -34,8 +35,7 @@ namespace RealEstate.Web.Controllers
         public IActionResult Details(int id)
         {
             var property = service.GetById(id);
-            if (property == null)
-                return NotFound();
+            if (property == null) return NotFound();
             var result = new PropertyDto
             {
                 PropertyId = property.PropertyId,
@@ -50,12 +50,32 @@ namespace RealEstate.Web.Controllers
             return View(result);
         }
 
+        [Authorize(Roles = "Admin")]
+        public IActionResult AdminIndex()
+        {
+            var properties = service.GetAll();
+            var result = properties.Select(p => new PropertyDto
+            {
+                PropertyId = p.PropertyId,
+                Title = p.Title,
+                Description = p.Description,
+                Location = p.Location,
+                TotalShares = p.TotalShares,
+                PricePerShare = p.PricePerShare,
+                Status = p.Status,
+                CreatedAt = p.CreatedAt
+            }).ToList();
+            return View("../Admin/Properties/Index", result);
+        }
+
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
-            return View();
+            return View("../Admin/Properties/Create");
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult Create(CreatePropertyDto dto)
         {
             var property = new Property
@@ -69,14 +89,14 @@ namespace RealEstate.Web.Controllers
                 CreatedAt = DateTime.Now
             };
             service.Add(property);
-            return RedirectToAction("Index");
+            return RedirectToAction("AdminIndex");
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(int id)
         {
             var property = service.GetById(id);
-            if (property == null)
-                return NotFound();
+            if (property == null) return NotFound();
             var result = new PropertyDto
             {
                 PropertyId = property.PropertyId,
@@ -88,30 +108,48 @@ namespace RealEstate.Web.Controllers
                 Status = property.Status,
                 CreatedAt = property.CreatedAt
             };
-            return View(result);
+            return View("../Admin/Properties/Edit", result);
         }
 
         [HttpPost]
-        public IActionResult Edit(Property property)
+        [Authorize(Roles = "Admin")]
+        public IActionResult Edit(PropertyDto dto)
         {
+            var property = service.GetById(dto.PropertyId);
+            property.Title = dto.Title;
+            property.Description = dto.Description;
+            property.Location = dto.Location;
+            property.TotalShares = dto.TotalShares;
+            property.PricePerShare = dto.PricePerShare;
+            property.Status = dto.Status;
             service.Update(property);
-            return RedirectToAction("Index");
+            return RedirectToAction("AdminIndex");
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
             var property = service.GetById(id);
-            if (property == null)
-                return NotFound();
-            return View(property);
+            if (property == null) return NotFound();
+            var result = new PropertyDto
+            {
+                PropertyId = property.PropertyId,
+                Title = property.Title,
+                Location = property.Location,
+                Status = property.Status,
+                PricePerShare = property.PricePerShare,
+                TotalShares = property.TotalShares
+            };
+            return View("../Admin/Properties/Delete", result);
         }
 
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin")]
         public IActionResult DeleteConfirmed(int id)
         {
             var property = service.GetById(id);
             service.Delete(property);
-            return RedirectToAction("Index");
+            return RedirectToAction("AdminIndex");
         }
     }
 }

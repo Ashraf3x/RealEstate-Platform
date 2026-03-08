@@ -1,0 +1,50 @@
+﻿@model RealEstate.Application.DTOs.UserDto
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "User Details";
+}
+
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-5">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h4 class="fw-bold mb-0">@Model.FirstName @Model.LastName</h4>
+                        <span class="badge @(Model.IsActive ? "bg-success" : "bg-secondary")">
+                            @(Model.IsActive ? "Active" : "Inactive")
+                        </span>
+                    </div>
+                    <hr />
+                    <div class="row g-3 mb-4">
+                        <div class="col-6">
+                            <div class="bg-light rounded p-3 text-center">
+                                <p class="text-muted small mb-1">Email</p>
+                                <h6 class="fw-bold mb-0">@Model.Email</h6>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="bg-light rounded p-3 text-center">
+                                <p class="text-muted small mb-1">Role</p>
+                                <h6 class="fw-bold mb-0">@Model.Role</h6>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="bg-light rounded p-3 text-center">
+                                <p class="text-muted small mb-1">User ID</p>
+                                <h6 class="fw-bold mb-0">@Model.UserId</h6>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="bg-light rounded p-3 text-center">
+                                <p class="text-muted small mb-1">Joined</p>
+                                <h6 class="fw-bold mb-0">@Model.CreatedAt.ToString("dd MMM yyyy")</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <a asp-action="Index" class="btn btn-outline-secondary w-100">Back</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

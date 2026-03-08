@@ -1,0 +1,47 @@
+﻿@model List<RealEstate.Application.DTOs.SaleListingDto>
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Marketplace";
+}
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h4 class="fw-bold mb-1">Marketplace</h4>
+            <p class="text-muted mb-0">Browse available property shares</p>
+        </div>
+        <a asp-action="Create" class="btn btn-success px-4">+ New Listing</a>
+    </div>
+    <div class="row g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4 col-sm-6">
+                <div class="card border-0 shadow-sm h-100 bg-dark text-white">
+                    <img src="https://loremflickr.com/400/200/realestate,building?lock=@item.ListingId"
+                         class="card-img-top" style="height:160px;object-fit:cover" />
+
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h5 class="fw-bold mb-0">@item.PropertyTitle</h5>
+                            <span class="badge @(item.Status == "Active" ? "bg-success" : item.Status == "Sold" ? "bg-danger" : "bg-secondary")">
+                                @item.Status
+                            </span>
+                        </div>
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted small">Price/Share</span>
+                                <span class="fw-semibold">$@item.PricePerShare</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span class="text-muted small">Quantity</span>
+                                <span class="fw-semibold">@item.Quantity shares</span>
+                            </div>
+                        </div>
+                        <a asp-action="Details" asp-route-id="@item.ListingId"
+                           class="btn btn-outline-light w-100">View Details</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
