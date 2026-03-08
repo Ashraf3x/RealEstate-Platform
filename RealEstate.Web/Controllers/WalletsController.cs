@@ -46,6 +46,7 @@ namespace RealEstate.Web.Controllers
 
         public IActionResult Deposit(int walletId)
         {
+            ViewBag.WalletId = walletId;
             return View();
         }
 
@@ -58,6 +59,7 @@ namespace RealEstate.Web.Controllers
 
         public IActionResult Withdraw(int walletId)
         {
+            ViewBag.WalletId = walletId;
             return View();
         }
 
@@ -79,6 +81,35 @@ namespace RealEstate.Web.Controllers
                 Timestamp = t.Timestamp
             }).ToList();
             return View(result);
+        }
+
+        [Route("Admin/Wallets/Index")]
+        public IActionResult GetAllWallets()
+        {
+            var wallets = walletService.GetAll();
+            var result = wallets.Select(w => new WalletDto
+            {
+                WalletId = w.WalletId,
+                UserId = w.UserId,
+                Balance = w.Balance,
+                CreatedAt = w.CreatedAt
+            }).ToList();
+            return View("~/Views/Admin/Wallets/Index.cshtml", result);
+        }
+
+        [Route("Admin/Wallets/Transactions")]
+        public IActionResult GetAllTransactions()
+        {
+            var transactions = walletService.GetAllTransactions();
+            var result = transactions.Select(t => new WalletTransactionDto
+            {
+                TransactionId = t.TransactionId,
+                WalletId = t.WalletId,
+                Type = t.Type,
+                Amount = t.Amount,
+                Timestamp = t.Timestamp
+            }).ToList();
+            return View("~/Views/Admin/Wallets/Transactions.cshtml", result);
         }
     }
 }

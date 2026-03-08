@@ -1,0 +1,18 @@
+﻿@model RealEstate.Application.DTOs.WalletDto
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "My Wallet";
+}
+
+<div class="bg-white rounded shadow-sm p-4">
+    <h4>My Wallet</h4>
+    <hr />
+    <p><strong>Wallet ID:</strong> @Model.WalletId</p>
+    <p><strong>Balance:</strong> @Model.Balance EGP</p>
+    <div class="d-flex gap-2 mt-3">
+        <a class="btn btn-success" asp-controller="Wallets" asp-action="Deposit" asp-route-walletId="@Model.WalletId">Deposit</a>
+        <a class="btn btn-danger" asp-controller="Wallets" asp-action="Withdraw" asp-route-walletId="@Model.WalletId">Withdraw</a>
+        <a class="btn btn-secondary" asp-controller="Wallets" asp-action="GetTransactions" asp-route-walletId="@Model.WalletId">Transactions</a>
+    </div>
+</div>

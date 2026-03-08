@@ -1,0 +1,33 @@
+﻿@model IEnumerable<RealEstate.Application.DTOs.WalletTransactionDto>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Transaction History";
+}
+
+<div class="bg-white rounded shadow-sm p-4">
+    <h4>Transaction History</h4>
+    <hr />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Transaction ID</th>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var t in Model)
+            {
+                <tr>
+                    <td>@t.TransactionId</td>
+                    <td>@t.Type</td>
+                    <td>@t.Amount EGP</td>
+                    <td>@t.Timestamp</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a class="btn btn-secondary mt-3" asp-action="Index">Back to Wallet</a>
+</div>

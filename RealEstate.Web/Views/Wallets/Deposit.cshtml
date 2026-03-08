@@ -1,0 +1,18 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Deposit";
+}
+
+<div class="bg-white rounded shadow-sm p-4">
+    <h4>Deposit</h4>
+    <hr />
+    <form method="post" asp-action="Deposit" asp-route-walletId="@ViewBag.WalletId">
+        <input type="hidden" name="walletId" value="@ViewBag.WalletId" />
+        <div class="mb-3">
+            <label class="form-label">Amount</label>
+            <input type="number" class="form-control" name="amount" min="1" required />
+        </div>
+        <button type="submit" class="btn btn-success">Deposit</button>
+        <a class="btn btn-secondary" asp-action="Index">Cancel</a>
+    </form>
+</div>
