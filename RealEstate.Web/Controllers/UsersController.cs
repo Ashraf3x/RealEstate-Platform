@@ -107,8 +107,13 @@ namespace RealEstate.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(User user)
+        public IActionResult Edit(UserDto dto)
         {
+            var user = service.GetById(dto.UserId);
+            user.FirstName = dto.FirstName;
+            user.LastName = dto.LastName;
+            user.Role = dto.Role;
+            user.IsActive = dto.IsActive;
             service.Update(user);
             return RedirectToAction("Index");
         }
@@ -117,9 +122,18 @@ namespace RealEstate.Web.Controllers
         {
             var user = service.GetById(id);
             if (user == null) return NotFound();
-            return View(user);
+            var result = new UserDto
+            {
+                UserId = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Role = user.Role,
+                IsActive = user.IsActive,
+                CreatedAt = user.CreatedAt
+            };
+            return View(result);
         }
-
         [HttpPost, ActionName("Delete")]
         public IActionResult DeleteConfirmed(int id)
         {
