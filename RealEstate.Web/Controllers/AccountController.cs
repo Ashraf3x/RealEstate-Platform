@@ -54,6 +54,7 @@ namespace RealEstate.Web.Controllers
                 Email = dto.Email,
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
+                Role = "User",
                 IsActive = true,
                 CreatedAt = DateTime.Now
             };

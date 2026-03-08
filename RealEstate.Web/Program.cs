@@ -33,7 +33,6 @@ namespace RealEstate.Web
 
             builder.Services.AddScoped<WalletService>();
 
-            builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<ISaleListingRepository, SaleListingRepository>();
             builder.Services.AddScoped<SaleListingService>();
             builder.Services.AddScoped<IPropertyRepository, PropertyRepository>();
@@ -47,6 +46,8 @@ namespace RealEstate.Web
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
             }).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+
+            builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
             using (var scope = app.Services.CreateScope())

@@ -1,0 +1,57 @@
+﻿@model RealEstate.Application.DTOs.CreateSaleListingDto
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "New Listing";
+}
+
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-5">
+                    <h4 class="fw-bold mb-1">Create Listing</h4>
+                    <p class="text-muted mb-4">Add a new property listing</p>
+                    <form asp-action="Create" method="post">
+                        <div class="mb-3">
+                            <label asp-for="PropertyId" class="form-label fw-semibold">Property</label>
+                            <select asp-for="PropertyId" asp-items="ViewBag.Properties" class="form-select">
+                                <option value="">-- Select Property --</option>
+                            </select>
+                            <span asp-validation-for="PropertyId" class="text-danger small"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="PricePerShare" class="form-label fw-semibold">Price Per Share ($)</label>
+                            <input asp-for="PricePerShare" class="form-control" />
+                            <span asp-validation-for="PricePerShare" class="text-danger small"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Quantity" class="form-label fw-semibold">Quantity</label>
+                            <input asp-for="Quantity" class="form-control" />
+                            <span asp-validation-for="Quantity" class="text-danger small"></span>
+                        </div>
+                        <div class="mb-4">
+                            <label asp-for="Status" class="form-label fw-semibold">Status</label>
+                            <select asp-for="Status" class="form-select">
+                                <option value="">Select status</option>
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                                <option value="Sold">Sold</option>
+                            </select>
+                            <span asp-validation-for="Status" class="text-danger small"></span>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-success flex-grow-1">Create Listing</button>
+                            <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

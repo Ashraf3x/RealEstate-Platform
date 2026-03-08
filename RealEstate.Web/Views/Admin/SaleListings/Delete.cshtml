@@ -1,0 +1,46 @@
+﻿@model RealEstate.Application.DTOs.SaleListingDto
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Delete Listing";
+}
+
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-5 text-center">
+                    <div class="bg-danger bg-opacity-10 rounded-circle d-inline-flex p-3 mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                             fill="none" viewBox="0 0 24 24" stroke="#dc3545" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+                        </svg>
+                    </div>
+                    <h5 class="fw-bold">Delete Listing?</h5>
+                    <p class="text-muted">
+                        <strong>@Model.PropertyTitle</strong> will be permanently deleted.
+                    </p>
+                    <div class="bg-light rounded p-3 mb-4 text-start">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted small">Price/Share</span>
+                            <span class="fw-semibold">$@Model.PricePerShare</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span class="text-muted small">Status</span>
+                            <span class="badge @(Model.Status == "Active" ? "bg-success" : "bg-secondary")">
+                                @Model.Status
+                            </span>
+                        </div>
+                    </div>
+                    <form asp-action="Delete" method="post">
+                        <input type="hidden" name="id" value="@Model.ListingId" />
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-danger flex-grow-1">Delete</button>
+                            <a asp-action="AdminIndex" class="btn btn-outline-secondary flex-grow-1">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
