@@ -1,0 +1,49 @@
+﻿@model IEnumerable<RealEstate.Application.DTOs.InvestmentDto>
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Manage Investments";
+}
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h4 class="fw-bold mb-1">All Investments</h4>
+            <p class="text-muted mb-0">System-wide investment records</p>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-0">
+            <table class="table table-hover mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="px-4 py-3">ID</th>
+                        <th class="py-3">Investor</th>
+                        <th class="py-3">Property</th>
+                        <th class="py-3">Shares</th>
+                        <th class="py-3">Ownership</th>
+                        <th class="py-3">Date</th>
+                        <th class="py-3 text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="px-4 py-3 text-muted">@item.InvestmentId</td>
+                            <td class="py-3 fw-semibold">@item.UserName</td>
+                            <td class="py-3">@item.PropertyName</td>
+                            <td class="py-3">@item.ShareCount</td>
+                            <td class="py-3"><span class="badge bg-success">@item.OwnershipPercentage.ToString("0.00")%</span></td>
+                            <td class="py-3">@item.PurchasedAt.ToString("MMM dd, yyyy")</td>
+                            <td class="py-3 text-center">
+                                <a asp-action="Edit" asp-route-id="@item.InvestmentId" class="btn btn-sm btn-outline-warning me-1">Edit</a>
+                                <a asp-action="Delete" asp-route-id="@item.InvestmentId" class="btn btn-sm btn-outline-danger">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

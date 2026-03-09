@@ -51,7 +51,7 @@ namespace RealEstate.Web.Controllers
         public IActionResult Create()
         {
             var properties = _propertyService.GetAll().ToList();
-            ViewBag.Properties = new SelectList(properties);
+            ViewBag.Properties = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(properties, "PropertyId", "Title");
             return View();
         }
         [HttpPost]
@@ -134,7 +134,7 @@ namespace RealEstate.Web.Controllers
                 PurchasedAt = investment.PurchasedAt,
             };
 
-            return View(investmentDto);
+            return View("~/Views/Admin/Investments/Delete.cshtml", investmentDto);
         }
         [HttpPost, ActionName("Delete")]
         public IActionResult DeleteConfirm(int id)
@@ -145,7 +145,7 @@ namespace RealEstate.Web.Controllers
                 return NotFound();
             }
             _investmentService.Delete(investment);
-            return RedirectToAction("Index");
+            return RedirectToAction("AdminIndex");
         }
         public IActionResult GetByUserId(int userId)
         {
@@ -184,6 +184,20 @@ namespace RealEstate.Web.Controllers
             }).ToList();
             return View(investmentsDtos);
         }
+        [HttpGet]
+        public IActionResult AdminIndex()
+        {
+            var investments = _investmentService.GetAll().Select(i => new InvestmentDto
+            {
+                InvestmentId = i.InvestmentId,
+                UserName = i.User.FirstName + " " + i.User.LastName,
+                ShareCount = i.ShareCount,
+                OwnershipPercentage = i.OwnershipPercentage,
+                PropertyName = i.Property.Title,
+                PurchasedAt = i.PurchasedAt,
+            }).ToList();
 
+            return View("~/Views/Admin/Investments/Index.cshtml", investments);
+        }
     }
 }

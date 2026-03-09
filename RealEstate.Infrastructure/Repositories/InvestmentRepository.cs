@@ -29,5 +29,19 @@ namespace RealEstate.Infrastructure.Repositories
                 .Include(i => i.User)
                 .ToList();
         }
+        public List<Investment> GetAllWithDetails()
+        {
+            return context.Investments
+                .Include(i => i.User)
+                .Include(i => i.Property)
+                .ToList();
+        }
+        public Investment GetByIdWithDetails(int id)
+        {
+            return context.Investments
+                .Include(i => i.User)
+                .Include(i => i.Property)
+                .FirstOrDefault(i => i.InvestmentId == id);
+        }
     }
 }
