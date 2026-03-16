@@ -1,0 +1,41 @@
+﻿@model IEnumerable<RealEstate.Application.DTOs.WalletTransactionDto>
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "All Transactions";
+}
+
+<div class="bg-white rounded shadow-sm p-4">
+    <h4>All Transactions</h4>
+    <hr />
+    @if (Model?.Any() == true)
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Transaction ID</th>
+                    <th>Wallet ID</th>
+                    <th>Type</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var t in Model)
+                {
+                    <tr>
+                        <td>@t.TransactionId</td>
+                        <td>@t.WalletId</td>
+                        <td>@t.Type</td>
+                        <td>@t.Amount EGP</td>
+                        <td>@t.Timestamp</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No transactions found.</p>
+    }
+</div>
