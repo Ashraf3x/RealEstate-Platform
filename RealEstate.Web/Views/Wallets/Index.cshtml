@@ -1,18 +1,33 @@
 ﻿@model RealEstate.Application.DTOs.WalletDto
-
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewData["Title"] = "My Wallet";
+    Layout = "_Layout"; ViewData["Title"] = "My Wallet";
 }
 
-<div class="bg-white rounded shadow-sm p-4">
-    <h4>My Wallet</h4>
-    <hr />
-    <p><strong>Wallet ID:</strong> @Model.WalletId</p>
-    <p><strong>Balance:</strong> @Model.Balance EGP</p>
-    <div class="d-flex gap-2 mt-3">
-        <a class="btn btn-success" asp-controller="Wallets" asp-action="Deposit" asp-route-walletId="@Model.WalletId">Deposit</a>
-        <a class="btn btn-danger" asp-controller="Wallets" asp-action="Withdraw" asp-route-walletId="@Model.WalletId">Withdraw</a>
-        <a class="btn btn-secondary" asp-controller="Wallets" asp-action="GetTransactions" asp-route-walletId="@Model.WalletId">Transactions</a>
+<div class="mb-4">
+    <h1 class="page-title mb-1"><i class="fas fa-wallet me-2" style="font-size:1.3rem"></i>My Wallet</h1>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-5">
+        <div class="card-glass p-4">
+            <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:6px">Available Balance</div>
+            <div style="font-family:'Rajdhani',sans-serif;font-size:2.2rem;font-weight:700;color:var(--gold-light)">
+                @Model.Balance.ToString("N2") <span style="font-size:1rem;color:var(--text-muted)">EGP</span>
+            </div>
+            <hr class="gold-divider" />
+            <div style="font-size:0.78rem;color:var(--text-muted)">Wallet #@Model.WalletId</div>
+        </div>
     </div>
+</div>
+
+<div class="d-flex gap-2">
+    <a asp-action="Deposit" class="btn-gold d-flex align-items-center gap-2" style="text-decoration:none;border-radius:8px;padding:9px 20px;font-size:0.87rem;font-weight:600">
+        <i class="fas fa-plus-circle"></i> Deposit
+    </a>
+    <a asp-action="Withdraw" style="background:rgba(220,53,69,0.15);border:1px solid rgba(220,53,69,0.3);color:#ff8080;border-radius:8px;padding:9px 20px;font-size:0.87rem;font-weight:600;text-decoration:none;display:flex;align-items:center;gap:6px">
+        <i class="fas fa-minus-circle"></i> Withdraw
+    </a>
+    <a asp-action="Transactions" class="btn-glass d-flex align-items-center gap-2" style="text-decoration:none;border-radius:8px;padding:9px 20px;font-size:0.87rem">
+        <i class="fas fa-list"></i> Transactions
+    </a>
 </div>

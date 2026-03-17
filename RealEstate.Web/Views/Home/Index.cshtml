@@ -1,9 +1,98 @@
 ﻿@{
-    // Layout = "~/Views/Shared/_AdminLayout.cshtml";
-    ViewData["Title"] = "Home";
+    var role = Context.Session.GetString("Role");
+    Layout = role == "Admin" ? "_AdminLayout" : "_Layout";
+    ViewData["Title"] = "Dashboard";
 }
 
-<div class="container">
-    <h1>Welcome to PropVest</h1>
-    <p>Your real estate investment platform</p>
-</div>
+@if (role == "Admin")
+{
+    <div class="container-fluid py-4">
+        <div class="mb-4">
+            <h4 class="fw-bold mb-1"><i class="bi bi-speedometer2 me-2"></i>Admin Dashboard</h4>
+            <p class="text-muted">Platform overview</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm text-center p-4">
+                    <i class="bi bi-people text-primary mb-2" style="font-size:2rem"></i>
+                    <h6 class="text-muted">User Management</h6>
+                    <a asp-controller="Users" asp-action="Index" class="btn btn-outline-dark btn-sm mt-2">View</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm text-center p-4">
+                    <i class="bi bi-buildings text-success mb-2" style="font-size:2rem"></i>
+                    <h6 class="text-muted">Properties</h6>
+                    <a asp-controller="Properties" asp-action="AdminIndex" class="btn btn-outline-dark btn-sm mt-2">View</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm text-center p-4">
+                    <i class="bi bi-graph-up text-warning mb-2" style="font-size:2rem"></i>
+                    <h6 class="text-muted">Investments</h6>
+                    <a asp-controller="Investments" asp-action="AdminIndex" class="btn btn-outline-dark btn-sm mt-2">View</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm text-center p-4">
+                    <i class="bi bi-cash-stack text-info mb-2" style="font-size:2rem"></i>
+                    <h6 class="text-muted">Financial</h6>
+                    <a asp-controller="Wallets" asp-action="AdminIndex" class="btn btn-outline-dark btn-sm mt-2">View</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm text-center p-4">
+                    <i class="bi bi-shop text-danger mb-2" style="font-size:2rem"></i>
+                    <h6 class="text-muted">Marketplace</h6>
+                    <a asp-controller="SaleListings" asp-action="AdminIndex" class="btn btn-outline-dark btn-sm mt-2">View</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container-fluid py-4">
+        <div class="mb-4">
+            <h4 class="fw-bold mb-1"><i class="bi bi-speedometer2 me-2"></i>Welcome Back</h4>
+            <p class="text-muted">Your investment overview</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm text-center p-4">
+                    <i class="bi bi-buildings text-primary mb-2" style="font-size:2rem"></i>
+                    <h6 class="text-muted">Browse Properties</h6>
+                    <a asp-controller="Properties" asp-action="Index" class="btn btn-outline-dark btn-sm mt-2">View</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm text-center p-4">
+                    <i class="bi bi-shop text-success mb-2" style="font-size:2rem"></i>
+                    <h6 class="text-muted">Marketplace</h6>
+                    <a asp-controller="SaleListings" asp-action="Index" class="btn btn-outline-dark btn-sm mt-2">View</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm text-center p-4">
+                    <i class="bi bi-wallet2 text-warning mb-2" style="font-size:2rem"></i>
+                    <h6 class="text-muted">My Wallet</h6>
+                    <a asp-controller="Wallets" asp-action="Index" class="btn btn-outline-dark btn-sm mt-2">View</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm text-center p-4">
+                    <i class="bi bi-graph-up-arrow text-info mb-2" style="font-size:2rem"></i>
+                    <h6 class="text-muted">My Portfolio</h6>
+                    <a asp-controller="Investments" asp-action="Index" class="btn btn-outline-dark btn-sm mt-2">View</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm text-center p-4">
+                    <i class="bi bi-person-circle text-secondary mb-2" style="font-size:2rem"></i>
+                    <h6 class="text-muted">My Profile</h6>
+                    <a asp-controller="Profile" asp-action="Index" class="btn btn-outline-dark btn-sm mt-2">View</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}

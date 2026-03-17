@@ -13,5 +13,6 @@ namespace RealEstate.Application.DTOs
 
         [Display(Name = "Remember Me")]
         public bool RememberMe { get; set; }
+        public string Role { get; set; } = "User";
     }
 }

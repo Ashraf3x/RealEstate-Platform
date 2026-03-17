@@ -4,49 +4,60 @@
     ViewData["Title"] = "User Management";
 }
 
-<div class="container-fluid py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h4 class="fw-bold mb-1">Users</h4>
-            <p class="text-muted mb-0">@Model.Count total users</p>
-        </div>
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h1 class="page-title mb-1">Users</h1>
+        <p style="color:var(--text-muted);font-size:0.85rem;margin:0">@Model.Count total users</p>
     </div>
-    <div class="card border-0 shadow-sm">
-        <div class="card-body p-0">
-            <table class="table table-hover mb-0">
-                <thead class="bg-light">
-                    <tr>
-                        <th class="px-4 py-3">#</th>
-                        <th class="py-3">Name</th>
-                        <th class="py-3">Email</th>
-                        <th class="py-3">Role</th>
-                        <th class="py-3">Status</th>
-                        <th class="py-3">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td class="px-4 py-3 text-muted">@item.UserId</td>
-                            <td class="py-3 fw-semibold">@item.FirstName @item.LastName</td>
-                            <td class="py-3">@item.Email</td>
-                            <td class="py-3">@item.Role</td>
-                            <td class="py-3">
-                                <span class="badge @(item.IsActive ? "bg-success" : "bg-secondary")">
-                                    @(item.IsActive ? "Active" : "Inactive")
-                                </span>
-                            </td>
-                            <td class="py-3">
-                                <a asp-action="Details" asp-route-id="@item.UserId"
-                                   class="btn btn-sm btn-outline-info me-1">Details</a>
-                                <a asp-action="Delete" asp-route-id="@item.UserId"
-                                   class="btn btn-sm btn-outline-danger">Delete</a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </div>
+</div>
+
+<div class="card-glass">
+    <table class="table-glass">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td style="color:var(--text-muted)">@item.UserId</td>
+                    <td style="font-weight:600">@item.FirstName @item.LastName</td>
+                    <td style="color:var(--text-muted)">@item.Email</td>
+                    <td>
+                        @if (item.Role == "Admin")
+                        {
+                            <span class="badge-gold-glass">@item.Role</span>
+                        }
+                        else
+                        {
+                            <span class="badge-muted-glass">@item.Role</span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.IsActive)
+                        {
+                            <span class="badge-success-glass">Active</span>
+                        }
+                        else
+                        {
+                            <span class="badge-danger-glass">Inactive</span>
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.UserId"
+                           class="btn-glass me-1" style="text-decoration:none;border-radius:6px;padding:4px 12px;font-size:0.82rem">Details</a>
+                        <a asp-action="Delete" asp-route-id="@item.UserId"
+                           class="btn-danger-glass" style="text-decoration:none;border-radius:6px;padding:4px 12px;font-size:0.82rem">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>

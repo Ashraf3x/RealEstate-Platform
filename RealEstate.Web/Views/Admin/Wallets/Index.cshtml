@@ -1,39 +1,28 @@
 ﻿@model IEnumerable<RealEstate.Application.DTOs.WalletDto>
-
 @{
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
-    ViewData["Title"] = "All Wallets";
+    Layout = "_AdminLayout"; ViewData["Title"] = "All Wallets";
 }
 
-<div class="bg-white rounded shadow-sm p-4">
-    <h4>All Wallets</h4>
-    <hr />
-    @if (Model?.Any() == true)
-    {
-        <table class="table">
-            <thead>
+<div class="mb-4">
+    <h1 class="page-title mb-1">All Wallets</h1>
+    <p style="color:var(--text-muted);font-size:0.85rem;margin:0">User wallet balances</p>
+</div>
+
+<div class="card-glass">
+    <table class="table-glass">
+        <thead>
+            <tr><th>Wallet ID</th><th>User ID</th><th>Balance</th><th>Created At</th></tr>
+        </thead>
+        <tbody>
+            @foreach (var wallet in Model)
+            {
                 <tr>
-                    <th>Wallet ID</th>
-                    <th>User ID</th>
-                    <th>Balance</th>
-                    <th>Created At</th>
+                    <td style="color:var(--text-muted)">#@wallet.WalletId</td>
+                    <td>@wallet.UserId</td>
+                    <td><span class="badge-gold-glass">@wallet.Balance EGP</span></td>
+                    <td style="color:var(--text-muted)">@wallet.CreatedAt</td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach (var wallet in Model)
-                {
-                    <tr>
-                        <td>@wallet.WalletId</td>
-                        <td>@wallet.UserId</td>
-                        <td>@wallet.Balance EGP</td>
-                        <td>@wallet.CreatedAt</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
-    else
-    {
-        <p>No wallets found.</p>
-    }
+            }
+        </tbody>
+    </table>
 </div>

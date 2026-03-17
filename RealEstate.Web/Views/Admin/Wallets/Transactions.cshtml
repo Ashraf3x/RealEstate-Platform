@@ -1,41 +1,44 @@
 ﻿@model IEnumerable<RealEstate.Application.DTOs.WalletTransactionDto>
-
 @{
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
-    ViewData["Title"] = "All Transactions";
+    Layout = "_AdminLayout"; ViewData["Title"] = "All Transactions";
 }
 
-<div class="bg-white rounded shadow-sm p-4">
-    <h4>All Transactions</h4>
-    <hr />
-    @if (Model?.Any() == true)
-    {
-        <table class="table">
-            <thead>
+<div class="mb-4">
+    <h1 class="page-title mb-1">Transactions</h1>
+    <p style="color:var(--text-muted);font-size:0.85rem;margin:0">All wallet transactions</p>
+</div>
+
+<div class="card-glass">
+    <table class="table-glass">
+        <thead>
+            <tr><th>ID</th><th>Wallet</th><th>Type</th><th>Amount</th><th>Date</th></tr>
+        </thead>
+        <tbody>
+            @foreach (var t in Model)
+            {
                 <tr>
-                    <th>Transaction ID</th>
-                    <th>Wallet ID</th>
-                    <th>Type</th>
-                    <th>Amount</th>
-                    <th>Date</th>
+                    <td style="color:var(--text-muted)">#@t.TransactionId</td>
+                    <td>@t.WalletId</td>
+                    <td>
+                        @if (t.Type == "Deposit")
+                        {
+                            <span class="badge-success-glass">Deposit</span>
+                        }
+                        else if (t.Type == "Withdrawal")
+                        {
+
+                            <span class="badge-danger-glass">Withdrawal</span>
+                        }
+                        else
+                        {
+
+                            <span class="badge-muted-glass">@t.Type</span>
+                        }
+                    </td>
+                    <td style="font-weight:600">@t.Amount EGP</td>
+                    <td style="color:var(--text-muted)">@t.Timestamp</td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach (var t in Model)
-                {
-                    <tr>
-                        <td>@t.TransactionId</td>
-                        <td>@t.WalletId</td>
-                        <td>@t.Type</td>
-                        <td>@t.Amount EGP</td>
-                        <td>@t.Timestamp</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
-    else
-    {
-        <p>No transactions found.</p>
-    }
+            }
+        </tbody>
+    </table>
 </div>
