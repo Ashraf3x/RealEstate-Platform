@@ -12,8 +12,8 @@ using RealEstate.Infrastructure.Data;
 namespace RealEstate.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260307235223_v")]
-    partial class v
+    [Migration("20260316012926_v1")]
+    partial class v1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -307,6 +307,30 @@ namespace RealEstate.Infrastructure.Migrations
                     b.HasKey("PropertyId");
 
                     b.ToTable("Properties");
+
+                    b.HasData(
+                        new
+                        {
+                            PropertyId = 1,
+                            CreatedAt = new DateTime(2026, 3, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "A modern smart apartment with 3D viewing.",
+                            Location = "New Cairo",
+                            PricePerShare = 50m,
+                            Status = "Active",
+                            Title = "Smart Apartment in New Cairo",
+                            TotalShares = 1000
+                        },
+                        new
+                        {
+                            PropertyId = 2,
+                            CreatedAt = new DateTime(2026, 3, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Description = "Premium office space in the administrative capital.",
+                            Location = "New Capital",
+                            PricePerShare = 100m,
+                            Status = "Active",
+                            Title = "Fractional Real Estate Office",
+                            TotalShares = 500
+                        });
                 });
 
             modelBuilder.Entity("RealEstate.Domain.Entities.PropertyDocument", b =>

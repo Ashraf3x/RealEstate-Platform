@@ -1,49 +1,35 @@
 ﻿@model RealEstate.Application.DTOs.InvestmentDto
 @{
-    Layout = "_AdminLayout";
-    ViewData["Title"] = "Edit Investment";
+    Layout = "_AdminLayout"; ViewData["Title"] = "Edit Investment";
 }
 
-<div class="container-fluid py-4">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body p-5">
-                    <h4 class="fw-bold mb-4">Edit Investment #@Model.InvestmentId</h4>
-
-                    <div class="alert alert-info border-0 mb-4">
-                        <strong>Investor:</strong> @Model.UserName <br />
-                        <strong>Property:</strong> @Model.PropertyName
-                    </div>
-
-                    <form asp-action="Edit" method="post">
-                        <input type="hidden" asp-for="InvestmentId" />
-
-                        <input type="hidden" asp-for="UserName" />
-                        <input type="hidden" asp-for="PropertyName" />
-                        <input type="hidden" asp-for="OwnershipPercentage" />
-                        <input type="hidden" asp-for="PurchasedAt" />
-
-                        <div class="mb-4">
-                            <label asp-for="ShareCount" class="form-label fw-semibold">Adjust Share Count</label>
-                            <input asp-for="ShareCount" class="form-control" type="number" min="1" />
-                            <span asp-validation-for="ShareCount" class="text-danger small"></span>
-                            <div class="form-text mt-2"><i class="bi bi-info-circle me-1"></i>Ownership percentage will be automatically recalculated based on the new shares.</div>
-                        </div>
-
-                        <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-warning flex-grow-1 text-dark fw-bold">Save Changes</button>
-                            <a asp-action="AdminIndex" class="btn btn-outline-secondary">Cancel</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="d-flex align-items-center gap-3 mb-4">
+    <a asp-action="AdminIndex" class="btn-glass" style="text-decoration:none;border-radius:8px;padding:7px 14px;font-size:0.83rem"><i class="fas fa-arrow-left me-1"></i> Back</a>
+    <h1 class="page-title mb-0">Edit Investment #@Model.InvestmentId</h1>
 </div>
 
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
+<div class="card-glass p-4" style="max-width:480px">
+    <div style="background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.15);border-radius:10px;padding:12px 16px;margin-bottom:1.5rem;font-size:0.85rem">
+        <div style="color:var(--text-muted)">Investor</div>
+        <div style="font-weight:600">@Model.UserName</div>
+        <div style="color:var(--text-muted);margin-top:6px">Property</div>
+        <div style="font-weight:600">@Model.PropertyName</div>
+    </div>
+    <form asp-action="Edit" method="post">
+        <input type="hidden" asp-for="InvestmentId" />
+        <input type="hidden" asp-for="UserName" />
+        <input type="hidden" asp-for="PropertyName" />
+        <input type="hidden" asp-for="OwnershipPercentage" />
+        <input type="hidden" asp-for="PurchasedAt" />
+        <div class="mb-4">
+            <label class="form-label-glass">Share Count</label>
+            <input asp-for="ShareCount" class="form-control form-control-glass" type="number" min="1" />
+            <span asp-validation-for="ShareCount" style="color:#ff8080;font-size:0.78rem"></span>
+            <div style="font-size:0.78rem;color:var(--text-muted);margin-top:5px"><i class="fas fa-info-circle me-1"></i>Ownership % will be recalculated automatically.</div>
+        </div>
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn-gold flex-grow-1">Save Changes</button>
+            <a asp-action="AdminIndex" class="btn-glass" style="text-decoration:none;border-radius:8px;padding:8px 16px">Cancel</a>
+        </div>
+    </form>
+</div>
