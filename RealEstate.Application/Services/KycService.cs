@@ -1,15 +1,17 @@
-﻿using RealEstate.Domain.Entities;
+﻿using Microsoft.AspNetCore.Identity;
+using RealEstate.Domain.Entities;
 using RealEstate.Domain.Interfaces;
 
 namespace RealEstate.Application.Services
 {
     public class KycService
     {
-        private readonly IKycRepository repository;
-
-        public KycService(IKycRepository repo)
+        IKycRepository repository;
+        UserManager<User> userManager;
+        public KycService(IKycRepository repo, UserManager<User> um)
         {
             repository = repo;
+            userManager = um;
         }
 
         public List<KycDocument> GetAll()
@@ -29,7 +31,7 @@ namespace RealEstate.Application.Services
                 UserId = userId,
                 DocumentType = documentType,
                 FilePath = filePath,
-                Status = "Pending",
+                Status = KycStatus.Pending,
                 UploadedAt = DateTime.Now
             };
             repository.Add(doc);
@@ -39,15 +41,30 @@ namespace RealEstate.Application.Services
         {
             var doc = repository.GetById(id);
             if (doc == null) return;
-            doc.Status = "Approved";
+
+            doc.Status = KycStatus.Approved;
+            doc.ProcessedAt = DateTime.Now;
+            doc.RejectionReason = null;
+
             repository.Update(doc);
+
+            var user = userManager.FindByIdAsync(doc.UserId.ToString()).Result;
+            if (user != null)
+            {
+                user.IsVerified = true;
+                userManager.UpdateAsync(user).Wait();
+            }
         }
 
-        public void Reject(int id)
+        public void Reject(int id, string reason)
         {
             var doc = repository.GetById(id);
             if (doc == null) return;
-            doc.Status = "Rejected";
+
+            doc.Status = KycStatus.Rejected;
+            doc.ProcessedAt = DateTime.Now;
+            doc.RejectionReason = reason;
+
             repository.Update(doc);
         }
     }

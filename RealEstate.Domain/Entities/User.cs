@@ -21,5 +21,6 @@ namespace RealEstate.Domain.Entities
         public ICollection<Investment> Investments { get; set; }
         public ICollection<UserSaleListing> UserSaleListings { get; set; }
         public ICollection<UserPropertyContract> UserPropertyContracts { get; set; }
+        public bool IsVerified { get; set; } = false;
     }
 }
