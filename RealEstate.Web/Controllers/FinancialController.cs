@@ -1,12 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace RealEstate.Web.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class FinancialController : Controller
     {
         public IActionResult AdminIndex()
         {
-            return View();
+            return RedirectToAction("GetAllWallets", "Wallets");
         }
     }
 }
