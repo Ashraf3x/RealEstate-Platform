@@ -35,7 +35,8 @@ namespace RealEstate.Web
             builder.Services.AddScoped<PropertyService>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<UserService>();
-
+            builder.Services.AddScoped<IKycRepository, KycRepository>();
+            builder.Services.AddScoped<KycService>();
             builder.Services.AddIdentity<User, IdentityRole<int>>(options =>
             {
                 options.Password.RequireDigit = false;
