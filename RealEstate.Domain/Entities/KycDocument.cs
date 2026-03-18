@@ -18,10 +18,12 @@ namespace RealEstate.Domain.Entities
         public string FilePath { get; set; }
 
         [MaxLength(20)]
-        public string Status { get; set; }
+        public KycStatus Status { get; set; }
 
         public DateTime UploadedAt { get; set; }
 
         public User User { get; set; }
+        public string? RejectionReason { get; set; }
+        public DateTime? ProcessedAt { get; set; }
     }
 }

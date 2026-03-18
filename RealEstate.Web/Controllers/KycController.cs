@@ -24,12 +24,31 @@ namespace RealEstate.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Submit(string documentType, string filePath)
+        public async Task<IActionResult> Submit(string documentType, IFormFile documentFile)
         {
             var user = await userManager.GetUserAsync(User);
+
             if (user == null) return RedirectToAction("Login", "Account");
-            service.Submit(user.Id, documentType, filePath);
-            return RedirectToAction("Index");
+
+            if (documentFile != null && documentFile.Length > 0)
+            {
+                var folder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "kyc");
+
+                if (!Directory.Exists(folder))
+                {
+                    Directory.CreateDirectory(folder);
+                }
+
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(documentFile.FileName);
+                var path = Path.Combine(folder, fileName);
+
+                var fileStream = new FileStream(path, FileMode.Create);
+                await documentFile.CopyToAsync(fileStream);
+                fileStream.Close();
+
+                service.Submit(user.Id, documentType, "/uploads/kyc/" + fileName);
+            }
+                return RedirectToAction("Index");
         }
 
         [Authorize(Roles = "Admin")]
@@ -49,9 +68,9 @@ namespace RealEstate.Web.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public IActionResult Reject(int id)
+        public IActionResult Reject(int id, string reason)
         {
-            service.Reject(id);
+            service.Reject(id, reason);
             return RedirectToAction("AdminIndex");
         }
     }
