@@ -10,5 +10,9 @@
         public decimal PricePerShare { get; set; }
         public string Status { get; set; }
         public DateTime CreatedAt { get; set; }
+        public decimal? AnnualYield { get; set; }
+        public int? OccupancyRate { get; set; }
+        public string? AppreciationStatus { get; set; }
+        public int? AppreciationProgress { get; set; }
     }
 }

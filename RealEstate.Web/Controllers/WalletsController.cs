@@ -19,14 +19,19 @@ namespace RealEstate.Web.Controllers
         {
             var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
             var wallet = walletService.GetWalletByUserId(userId);
-            if (wallet == null) {
-                return NotFound();
-            };
+            if (wallet == null) return NotFound();
+
+          
+            var transactions = walletService.GetTransactionsByWalletId(wallet.WalletId).OrderByDescending(t => t.Timestamp).Take(5).Select(t => new WalletTransactionDto{Type = t.Type,
+            Amount = t.Amount,
+            Timestamp = t.Timestamp
+            }).ToList();
 
             var result = new WalletDto
             {
                 WalletId = wallet.WalletId,
                 Balance = wallet.Balance,
+                RecentTransactions = transactions
             };
 
             return View(result);

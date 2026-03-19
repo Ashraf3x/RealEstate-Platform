@@ -18,39 +18,39 @@ namespace RealEstate.Web.Controllers
             userManager = um;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var user = await userManager.GetUserAsync(User);
+            if (user == null) return RedirectToAction("Login", "Account");
+
+            var userDocs = service.GetByUserId(user.Id);
+            return View(userDocs);
         }
 
         [HttpPost]
         public async Task<IActionResult> Submit(string documentType, IFormFile documentFile)
         {
             var user = await userManager.GetUserAsync(User);
-
             if (user == null) return RedirectToAction("Login", "Account");
 
             if (documentFile != null && documentFile.Length > 0)
             {
                 var folder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "kyc");
-
-                if (!Directory.Exists(folder))
-                {
-                    Directory.CreateDirectory(folder);
-                }
+                if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
 
                 var fileName = Guid.NewGuid().ToString() + Path.GetExtension(documentFile.FileName);
                 var path = Path.Combine(folder, fileName);
 
-                var fileStream = new FileStream(path, FileMode.Create);
-                await documentFile.CopyToAsync(fileStream);
-                fileStream.Close();
+                using (var fileStream = new FileStream(path, FileMode.Create))
+                {
+                    await documentFile.CopyToAsync(fileStream);
+                }
 
                 service.Submit(user.Id, documentType, "/uploads/kyc/" + fileName);
+                TempData["Success"] = "Document uploaded successfully.";
             }
-                return RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
-
         [Authorize(Roles = "Admin")]
         public IActionResult AdminIndex()
         {

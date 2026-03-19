@@ -1,35 +1,112 @@
 ﻿@model RealEstate.Application.DTOs.InvestmentDto
 @{
-    Layout = "_Layout"; ViewData["Title"] = "Investment Details";
+    Layout = "_Layout";
+    ViewData["Title"] = "Investment Details";
 }
 
-<div class="d-flex align-items-center gap-3 mb-4">
-    <a asp-action="Index" class="btn-glass" style="text-decoration:none;border-radius:8px;padding:7px 14px;font-size:0.83rem">
-        <i class="fas fa-arrow-left me-1"></i> Back
-    </a>
-    <h1 class="page-title mb-0">Investment Details</h1>
-</div>
+<div class="container-fluid py-4">
+    <div class="d-flex align-items-center gap-3 mb-4">
+        <a asp-action="Index" class="btn btn-glass rounded-circle p-2" style="width:40px; height:40px; display:flex; align-items:center; justify-content:center; text-decoration:none;">
+            <i class="fas fa-arrow-left text-white"></i>
+        </a>
+        <div>
+            <h1 class="h3 mb-0 fw-bold text-white" style="font-family:'Rajdhani',sans-serif;">Investment Details</h1>
+            <p class="text-muted small mb-0">Asset ID: #PRP-@Model.InvestmentId</p>
+        </div>
+    </div>
 
-<div class="card-glass p-4" style="max-width:500px">
-    <h5 style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.2rem;margin-bottom:1.25rem">@Model.PropertyName</h5>
-    <hr class="gold-divider" />
-    <div class="row g-3">
-        <div class="col-6">
-            <div style="background:rgba(255,255,255,0.04);border-radius:10px;padding:14px;text-align:center">
-                <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:4px">Shares</div>
-                <div style="font-size:1.3rem;font-weight:700;font-family:'Rajdhani',sans-serif">@Model.ShareCount</div>
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card-glass p-4 mb-4">
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <div class="p-3 rounded-3" style="background:rgba(201,168,76,0.1); border:1px solid rgba(201,168,76,0.2)">
+                        <i class="fas fa-building text-gold fa-2x"></i>
+                    </div>
+                    <div>
+                        <h2 class="h4 mb-1 fw-bold text-white">@Model.PropertyName</h2>
+                        <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3">Verified Asset</span>
+                    </div>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="p-3 rounded-3" style="background:rgba(255,255,255,0.03)">
+                            <div class="text-muted small mb-1">Purchase Date</div>
+                            <div class="fw-bold text-white">@Model.PurchasedAt.ToString("dd MMMM, yyyy")</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 rounded-3" style="background:rgba(255,255,255,0.03)">
+                            <div class="text-muted small mb-1">Transaction Status</div>
+                            <div class="fw-bold text-success">Completed</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-glass p-4">
+                <h6 class="text-white mb-3 fw-bold">Market Performance</h6>
+                <div class="card-glass p-4">
+                    <h6 class="text-white mb-4 fw-bold"><i class="fas fa-chart-line text-gold me-2"></i>Market Performance</h6>
+    
+                    <div class="row g-4">
+                        <div class="col-6">
+                            <div class="p-3 rounded-3" style="background:rgba(40,167,69,0.05); border:1px solid rgba(40,167,69,0.1)">
+                                <div class="text-muted small mb-1">Annual Yield</div>
+                                <div class="h5 fw-bold text-success mb-0">+@Model.AnnualYield%</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-3 rounded-3" style="background:rgba(255,193,7,0.05); border:1px solid rgba(255,193,7,0.1)">
+                                <div class="text-muted small mb-1">Occupancy</div>
+                                <div class="h5 fw-bold text-warning mb-0">@Model.OccupancyRate%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <div class="d-flex justify-content-between small mb-2">
+                            <span class="text-muted">Property Appreciation</span>
+                            <span class="text-white fw-bold">@Model.AppreciationStatus</span>
+                        </div>
+                        <div class="progress" style="height: 6px; background: rgba(255,255,255,0.05); border-radius:10px;">
+                            <div class="progress-bar bg-gold" style="width: @Model.AppreciationProgress%"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="col-6">
-            <div style="background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.15);border-radius:10px;padding:14px;text-align:center">
-                <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:4px">Ownership</div>
-                <div style="font-size:1.3rem;font-weight:700;font-family:'Rajdhani',sans-serif;color:var(--gold-light)">@Model.OwnershipPercentage.ToString("0.00")%</div>
-            </div>
-        </div>
-        <div class="col-12">
-            <div style="background:rgba(255,255,255,0.04);border-radius:10px;padding:14px;text-align:center">
-                <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:4px">Purchase Date</div>
-                <div style="font-size:1rem;font-weight:600">@Model.PurchasedAt.ToString("dd MMM yyyy")</div>
+
+        <div class="col-lg-4">
+            <div class="card-glass p-4 border-top border-warning border-3">
+                <h6 class="text-muted small text-uppercase fw-bold mb-4" style="letter-spacing:1px">Ownership Summary</h6>
+                
+                <div class="text-center mb-4">
+                    <div class="d-inline-block position-relative mb-3">
+                        <div style="width:120px; height:120px; border-radius:50%; border:8px solid rgba(201,168,76,0.1); display:flex; align-items:center; justify-content:center;">
+                            <span class="h4 fw-bold text-gold mb-0">@Model.OwnershipPercentage.ToString("0.0")%</span>
+                        </div>
+                    </div>
+                    <p class="text-white fw-bold mb-0">Your Share in Asset</p>
+                </div>
+
+                <hr style="border-color:rgba(255,255,255,0.05)">
+
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="text-muted">Shares Owned</span>
+                    <span class="text-white fw-bold">@Model.ShareCount Units</span>
+                </div>
+                <div class="d-flex justify-content-between mb-4">
+                    <span class="text-muted">Estimated Value</span>
+                    <span class="text-gold fw-bold">@(Model.ShareCount * 100) EGP</span>
+                </div>
+
+                <a asp-action="Create" class="btn btn-warning w-100 fw-bold py-2 mb-2 shadow-sm" style="text-decoration:none; display:block; text-align:center;">
+                    <i class="fas fa-plus-circle me-1"></i> Buy More Shares
+                </a>
+                <a asp-action="Index" class="btn btn-outline-danger w-100 fw-bold py-2 border-opacity-25" style="font-size:0.85rem; text-decoration:none; display:block; text-align:center;">
+                    <i class="fas fa-exchange-alt me-1"></i> Sell Shares
+                </a>
             </div>
         </div>
     </div>

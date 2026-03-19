@@ -1,4 +1,5 @@
-﻿namespace RealEstate.Application.DTOs
+﻿using Microsoft.AspNetCore.Http;
+namespace RealEstate.Application.DTOs
 {
     public class UserDto
     {
@@ -9,5 +10,9 @@
         public string Role { get; set; }
         public bool IsActive { get; set; }
         public DateTime CreatedAt { get; set; }
+        public bool IsVerified { get; set; }
+        public string PhoneNumber { get; set; }
+        public string? ProfilePicturePath { get; set; }
+        public IFormFile? ProfilePicture { get; set; }
     }
 }
