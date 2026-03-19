@@ -5,17 +5,29 @@
     ViewData["Title"] = "Withdraw";
 }
 
-<div class="bg-white rounded shadow-sm p-4">
-    <h4>Withdraw</h4>
-    <hr />
+<a asp-action="Index" style="display:inline-flex;align-items:center;gap:6px;color:var(--text-muted);font-size:0.83rem;text-decoration:none;margin-bottom:1rem;">
+    <i class="fas fa-arrow-left"></i> Back to Wallet
+</a>
+
+<div class="mb-4">
+    <h1 class="page-title mb-1"><i class="fas fa-minus-circle me-2" style="font-size:1.3rem"></i>Withdraw Funds</h1>
+</div>
+
+<div class="card-glass p-4" style="max-width:480px">
     <form method="post" asp-action="Withdraw">
         <input type="hidden" asp-for="WalletId" />
-        <div class="mb-3">
-            <label asp-for="Amount" class="form-label">Amount (EGP)</label>
-            <input type="number" asp-for="Amount" class="form-control" min="0.01" step="0.01" required />
-            <span asp-validation-for="Amount" class="text-danger"></span>
+        <div class="mb-4">
+            <label class="form-label-glass">Amount (EGP)</label>
+            <input type="number" asp-for="Amount" class="form-control-glass w-100" min="0.01" step="0.01" placeholder="Enter amount" required />
+            <span asp-validation-for="Amount" class="text-danger" style="font-size:0.8rem;"></span>
         </div>
-        <button type="submit" class="btn btn-danger">Withdraw</button>
-        <a class="btn btn-secondary" asp-action="Index">Cancel</a>
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn-danger-glass" style="flex:1;padding:10px;border-radius:8px;font-weight:600;cursor:pointer;">
+                <i class="fas fa-minus-circle me-2"></i>Withdraw
+            </button>
+            <a asp-action="Index" class="btn-glass" style="flex:1;padding:10px;text-align:center;text-decoration:none;">
+                Cancel
+            </a>
+        </div>
     </form>
 </div>

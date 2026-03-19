@@ -44,9 +44,14 @@
                                 <i class="fas fa-minus-circle me-1"></i> Withdraw
                             </a>
                         </div>
-                        <a asp-action="GetTransactions" asp-route-walletId="@Model.WalletId" class="btn btn-link text-gold text-decoration-none small">
-                            View All History <i class="fas fa-arrow-right ms-1"></i>
-                        </a>
+                        <div class="d-flex gap-2">
+                            <a asp-action="GetTransactions" asp-route-walletId="@Model.WalletId" class="btn-glass d-flex align-items-center gap-2" style="text-decoration:none;border-radius:8px;padding:7px 16px;font-size:0.83rem;">
+                                <i class="fas fa-list"></i> History
+                            </a>
+                            <a asp-action="Details" asp-route-id="@Model.WalletId" class="btn-glass d-flex align-items-center gap-2" style="text-decoration:none;border-radius:8px;padding:7px 16px;font-size:0.83rem;">
+                                <i class="fas fa-info-circle"></i> Details
+                            </a>
+                        </div>
                     </div>
                 </div>
 
@@ -54,9 +59,9 @@
                     <div class="card-glass p-4" style="background: rgba(0,0,0,0.2)">
                         <h6 class="mb-3 small text-muted text-uppercase" style="letter-spacing:1px">Recent Activity</h6>
                         <div class="table-responsive">
-                            <table class="table table-borderless align-middle text-white mb-0">
+                            <table class="table-glass table-borderless align-middle mb-0">
                                 <thead>
-                                    <tr class="text-muted small" style="border-bottom: 1px solid rgba(255,255,255,0.05)">
+                                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05)">
                                         <th>Type</th>
                                         <th>Date</th>
                                         <th class="text-end">Amount</th>

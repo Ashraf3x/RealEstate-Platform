@@ -5,15 +5,21 @@
     ViewData["Title"] = "Transaction History";
 }
 
-<div class="bg-white rounded shadow-sm p-4">
-    <h4>Transaction History</h4>
-    <hr />
-    @if (Model?.Any() == true)
-    {
-        <table class="table">
+<a asp-action="Index" style="display:inline-flex;align-items:center;gap:6px;color:var(--text-muted);font-size:0.83rem;text-decoration:none;margin-bottom:1rem;">
+    <i class="fas fa-arrow-left"></i> Back to Wallet
+</a>
+
+<div class="mb-4">
+    <h1 class="page-title mb-1"><i class="fas fa-list me-2" style="font-size:1.3rem"></i>Transaction History</h1>
+</div>
+
+@if (Model?.Any() == true)
+{
+    <div class="card-glass p-4">
+        <table class="table-glass">
             <thead>
                 <tr>
-                    <th>Transaction ID</th>
+                    <th>ID</th>
                     <th>Type</th>
                     <th>Amount</th>
                     <th>Date</th>
@@ -22,19 +28,27 @@
             <tbody>
                 @foreach (var t in Model)
                 {
+                    var isDeposit = t.Type == "Deposit";
                     <tr>
-                        <td>@t.TransactionId</td>
-                        <td>@t.Type</td>
-                        <td>@t.Amount EGP</td>
-                        <td>@t.Timestamp</td>
+                        <td style="color:var(--text-muted)">#@t.TransactionId</td>
+                        <td>
+                            <span class="@(isDeposit ? "badge-success-glass" : "badge-danger-glass")">
+                                @t.Type
+                            </span>
+                        </td>
+                        <td style="color:@(isDeposit ? "#6eff6e" : "#ff8080");font-weight:600;">
+                            @(isDeposit ? "+" : "-")EGP @t.Amount.ToString("N2")
+                        </td>
+                        <td style="color:var(--text-muted);font-size:0.85rem;">@t.Timestamp.ToString("MMM dd, yyyy · HH:mm")</td>
                     </tr>
                 }
             </tbody>
         </table>
-    }
-    else
-    {
-        <p>No transactions found.</p>
-    }
-    <a class="btn btn-secondary mt-3" asp-action="Index">Back to Wallet</a>
-</div>
+    </div>
+}
+else
+{
+    <div class="card-glass p-4" style="text-align:center;color:var(--text-muted);font-size:0.9rem;">
+        No transactions found.
+    </div>
+}

@@ -1,13 +1,125 @@
-﻿@{
-    Layout = "_AdminLayout"; ViewData["Title"] = "KYC";
+﻿@model List<RealEstate.Domain.Entities.KycDocument>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "KYC Verification";
+
+    var hasPending = Model.Any(d => d.Status == RealEstate.Domain.Entities.KycStatus.Pending);
+    var hasApproved = Model.Any(d => d.Status == RealEstate.Domain.Entities.KycStatus.Approved);
+    var showForm = !hasPending && !hasApproved;
 }
 
-<div class="mb-4">
-    <h1 class="page-title mb-1">KYC Management</h1>
-    <p style="color:var(--text-muted);font-size:0.85rem">Coming soon...</p>
-</div>
+<style>
+    .kyc-status-badge {
+        font-size: 11px;
+        padding: 3px 10px;
+        border-radius: 99px;
+        font-weight: 500;
+    }
+    .status-pending { background: rgba(255,193,7,0.15); color: #ffd96e; border: 1px solid rgba(255,193,7,0.3); }
+    .status-approved { background: rgba(40,167,69,0.15); color: #6eff6e; border: 1px solid rgba(40,167,69,0.3); }
+    .status-rejected { background: rgba(220,53,69,0.15); color: #ff8080; border: 1px solid rgba(220,53,69,0.3); }
 
-<div class="card-glass p-5 text-center">
-    <i class="fas fa-tools" style="font-size:2.5rem;color:var(--text-muted);display:block;margin-bottom:1rem"></i>
-    <p style="color:var(--text-muted)">This section is under construction.</p>
-</div>
+    .kyc-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 14px; padding: 1.5rem; margin-bottom: 1.5rem; }
+    .kyc-card-title { font-size: 1rem; font-weight: 500; color: #e0e0e0; margin-bottom: 1rem; }
+
+    .info-banner { border-radius: 10px; padding: 1rem 1.25rem; display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem; font-size: 0.875rem; }
+    .info-banner.pending { background: rgba(255,193,7,0.08); border: 1px solid rgba(255,193,7,0.25); color: #ffd96e; }
+    .info-banner.approved { background: rgba(40,167,69,0.08); border: 1px solid rgba(40,167,69,0.25); color: #6eff6e; }
+
+    .form-group { margin-bottom: 1.25rem; }
+    .form-group label { font-size: 0.8rem; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.8px; display: block; margin-bottom: 6px; }
+    .form-group select, .form-group input[type="file"] { width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); color: #fff; border-radius: 8px; padding: 10px 14px; font-size: 0.875rem; }
+    .form-group select:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,0.15); }
+    .form-group select option { background: #111118; }
+    .file-hint { font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 5px; }
+
+    .t-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 0.5px solid rgba(255,255,255,0.06); font-size: 13px; }
+    .t-row:last-child { border-bottom: none; }
+    .t-name { color: #ddd; font-size: 13px; }
+    .t-sub { color: #666; font-size: 11px; margin-top: 2px; }
+    .section-label { font-size: 11px; font-weight: 500; color: #888; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px; }
+</style>
+<a asp-controller="Profile" asp-action="Index" style="display:inline-flex;align-items:center;gap:6px;color:var(--text-muted);font-size:0.83rem;text-decoration:none;margin-bottom:1rem;">
+    <i class="fas fa-arrow-left"></i> Back to Profile
+</a>
+<div class="page-title">KYC Verification</div>
+<p style="color:var(--text-muted);font-size:0.875rem;margin-bottom:1.5rem;">Verify your identity to unlock full platform features.</p>
+
+@* Status Banner *@
+@if (hasApproved)
+{
+    <div class="info-banner approved">
+        <i class="fas fa-check-circle" style="font-size:1.2rem;"></i>
+        <div>
+            <div style="font-weight:500;">Your identity is verified</div>
+            <div style="font-size:12px;opacity:0.8;">Your KYC has been approved. You have full access to the platform.</div>
+        </div>
+    </div>
+}
+else if (hasPending)
+{
+    <div class="info-banner pending">
+        <i class="fas fa-clock" style="font-size:1.2rem;"></i>
+        <div>
+            <div style="font-weight:500;">Document under review</div>
+            <div style="font-size:12px;opacity:0.8;">Your submission is being reviewed by our team. </div>
+        </div>
+    </div>
+}
+
+@* Upload Form *@
+@if (showForm)
+{
+    <div class="kyc-card">
+        <div class="kyc-card-title">Submit a Document</div>
+        <form method="post" asp-action="Submit" enctype="multipart/form-data">
+            <div class="form-group">
+                <label>Document Type</label>
+                <select name="documentType" required>
+                    <option value="" disabled selected>Select document type</option>
+                    <option value="National ID">National ID</option>
+                    <option value="Passport">Passport</option>
+                    <option value="Utility Bill">Utility Bill</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Upload File</label>
+                <input type="file" name="documentFile" accept=".jpg,.jpeg,.png,.pdf" required />
+                <div class="file-hint">Accepted formats: JPG, PNG, PDF — Max size: 5MB</div>
+            </div>
+            <button type="submit" class="btn-gold" style="width:100%;padding:10px;">Submit Document</button>
+        </form>
+    </div>
+}
+
+@* Submissions History *@
+@if (Model.Any())
+{
+    <div class="kyc-card">
+        <div class="section-label">My Submissions</div>
+        @foreach (var doc in Model.OrderByDescending(d => d.UploadedAt))
+        {
+            <div class="t-row">
+                <div>
+                    <div class="t-name">@doc.DocumentType</div>
+                    <div class="t-sub">Submitted @doc.UploadedAt.ToString("MMM dd, yyyy")</div>
+                    @if (doc.Status == RealEstate.Domain.Entities.KycStatus.Rejected && !string.IsNullOrEmpty(doc.RejectionReason))
+                    {
+                        <div style="font-size:11px;color:#ff8080;margin-top:3px;">Reason: @doc.RejectionReason</div>
+                    }
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <a href="@doc.FilePath" target="_blank" style="font-size:11px;color:var(--gold);text-decoration:none;opacity:0.7;">
+                        <i class="fas fa-eye"></i> View
+                    </a>
+                    <span class="kyc-status-badge status-@doc.Status.ToString().ToLower()">@doc.Status</span>
+                </div>
+            </div>
+        }
+    </div>
+}
+else if (!showForm)
+{
+    <div style="color:#666;font-size:13px;text-align:center;padding:2rem 0;">No submissions yet</div>
+}
