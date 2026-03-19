@@ -25,7 +25,10 @@ namespace RealEstate.Web.Controllers
                 OwnershipPercentage = i.OwnershipPercentage,
                 PropertyName = i.Property.Title,
                 PurchasedAt = i.PurchasedAt,
-
+                AnnualYield = i.Property.AnnualYield ?? 0,
+                OccupancyRate = i.Property.OccupancyRate ?? 0,
+                AppreciationStatus = i.Property.AppreciationStatus ?? "Stable",
+                AppreciationProgress = i.Property.AppreciationProgress ?? 0
             }).ToList();
             return View(investmentsDtos);
         }
@@ -44,6 +47,10 @@ namespace RealEstate.Web.Controllers
                 OwnershipPercentage = investment.OwnershipPercentage,
                 PropertyName = investment.Property.Title,
                 PurchasedAt = investment.PurchasedAt,
+                AnnualYield = investment.Property.AnnualYield ?? 0,
+                OccupancyRate = investment.Property.OccupancyRate ?? 0,
+                AppreciationStatus = investment.Property.AppreciationStatus ?? "Stable",
+                AppreciationProgress = investment.Property.AppreciationProgress ?? 0
             };
             return View(investmentDto);
         }
@@ -57,23 +64,28 @@ namespace RealEstate.Web.Controllers
         [HttpPost]
         public IActionResult Create(CreateInvestmentDto createInvestmentDto)
         {
-
             if (ModelState.IsValid)
             {
-                var investment = new Investment
-                {
-                    UserId = createInvestmentDto.UserId,
-                    PropertyId = createInvestmentDto.PropertyId,
-                    ShareCount = createInvestmentDto.ShareCount,
-                    PurchasedAt = DateTime.UtcNow,
-                    OwnershipPercentage = (createInvestmentDto.ShareCount / 1000m) * 100
-                    //OwnershipPercentage = (createInvestmentDto.ShareCount / (decimal)property.TotalShares) * 100
+                var property = _propertyService.GetById(createInvestmentDto.PropertyId);
 
-                };
-                _investmentService.Add(investment);
-                return RedirectToAction("Index");
+                if (property != null)
+                {
+                    var investment = new Investment
+                    {
+                        UserId = createInvestmentDto.UserId,
+                        PropertyId = createInvestmentDto.PropertyId,
+                        ShareCount = createInvestmentDto.ShareCount,
+                        PurchasedAt = DateTime.UtcNow,
+                        OwnershipPercentage = ((decimal)createInvestmentDto.ShareCount / property.TotalShares) * 100
+                    };
+
+                    _investmentService.Add(investment);
+                    return RedirectToAction("Index");
+                }
             }
 
+            var properties = _propertyService.GetAll().ToList();
+            ViewBag.Properties = new SelectList(properties, "PropertyId", "Title");
             return View(createInvestmentDto);
         }
         [HttpGet]

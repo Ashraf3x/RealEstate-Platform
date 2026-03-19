@@ -1,33 +1,49 @@
 ﻿@model RealEstate.Application.DTOs.CreateInvestmentDto
 @{
-    Layout = "_Layout"; ViewData["Title"] = "New Investment";
+    Layout = "_Layout";
+    ViewData["Title"] = "New Investment";
 }
 
-<div class="d-flex align-items-center gap-3 mb-4">
-    <a asp-action="Index" class="btn-glass" style="text-decoration:none;border-radius:8px;padding:7px 14px;font-size:0.83rem">
-        <i class="fas fa-arrow-left me-1"></i> Back
-    </a>
-    <h1 class="page-title mb-0">Invest in Property</h1>
+<div class="container py-4">
+    <div class="d-flex align-items-center gap-3 mb-4">
+        <a asp-action="Index" class="btn-glass" style="text-decoration:none;border-radius:8px;padding:7px 14px;font-size:0.83rem">
+            <i class="fas fa-arrow-left me-1"></i> Back
+        </a>
+        <h1 class="page-title mb-0" style="font-family:'Rajdhani',sans-serif; font-weight:700;">Invest in Property</h1>
+    </div>
+
+    <div class="card-glass p-4" style="max-width:480px; border: 1px solid rgba(255,255,255,0.05);">
+        <form asp-action="Create" method="post">
+            <input type="hidden" asp-for="UserId" value="1" />
+            
+            <div class="mb-3">
+                <label class="form-label-glass mb-2 d-block" style="font-size:0.85rem; color:rgba(255,255,255,0.6)">Select Property</label>
+                <select asp-for="PropertyId" asp-items="ViewBag.Properties" class="form-select form-select-glass" style="background-color: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); color:white;">
+                    <option value="">— Choose a Property —</option>
+                </select>
+                <span asp-validation-for="PropertyId" class="d-block mt-1" style="color:#ff8080;font-size:0.78rem"></span>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label-glass mb-2 d-block" style="font-size:0.85rem; color:rgba(255,255,255,0.6)">Number of Shares</label>
+                <input asp-for="ShareCount" class="form-control form-control-glass" type="number" min="1" placeholder="Enter amount..." style="background-color: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); color:white;" />
+                <span asp-validation-for="ShareCount" class="d-block mt-1" style="color:#ff8080;font-size:0.78rem"></span>
+            </div>
+
+            <div class="d-flex gap-2 align-items-center">
+                <button type="submit" class="btn btn-warning fw-bold flex-grow-1 py-2 shadow-sm" style="border-radius:8px; background-color: #c9a84c; border:none; color:#1a1a1a;">
+                    Confirm Investment
+                </button>
+                <a asp-action="Index" class="btn-glass" style="text-decoration:none;border-radius:8px;padding:8px 16px; background: rgba(255,255,255,0.05); color:white; font-size:0.9rem;">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
 </div>
 
-<div class="card-glass p-4" style="max-width:480px">
-    <form asp-action="Create" method="post">
-        <input type="hidden" asp-for="UserId" value="1" />
-        <div class="mb-3">
-            <label class="form-label-glass">Select Property</label>
-            <select asp-for="PropertyId" asp-items="ViewBag.Properties" class="form-select form-select-glass">
-                <option value="">— Choose a Property —</option>
-            </select>
-            <span asp-validation-for="PropertyId" style="color:#ff8080;font-size:0.78rem"></span>
-        </div>
-        <div class="mb-4">
-            <label class="form-label-glass">Number of Shares</label>
-            <input asp-for="ShareCount" class="form-control form-control-glass" type="number" min="1" />
-            <span asp-validation-for="ShareCount" style="color:#ff8080;font-size:0.78rem"></span>
-        </div>
-        <div class="d-flex gap-2">
-            <button type="submit" class="btn-gold flex-grow-1">Confirm Investment</button>
-            <a asp-action="Index" class="btn-glass" style="text-decoration:none;border-radius:8px;padding:8px 16px">Cancel</a>
-        </div>
-    </form>
-</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
