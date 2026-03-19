@@ -18,9 +18,12 @@ namespace RealEstate.Web.Controllers
             userManager = um;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var user = await userManager.GetUserAsync(User);
+            if (user == null) return RedirectToAction("Login", "Account");
+            var docs = service.GetByUserId(user.Id);
+            return View(docs);
         }
 
         [HttpPost]
