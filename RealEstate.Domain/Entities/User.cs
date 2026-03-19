@@ -22,5 +22,6 @@ namespace RealEstate.Domain.Entities
         public ICollection<UserSaleListing> UserSaleListings { get; set; }
         public ICollection<UserPropertyContract> UserPropertyContracts { get; set; }
         public bool IsVerified { get; set; } = false;
+        public string? ProfilePicturePath { get; set; }
     }
 }

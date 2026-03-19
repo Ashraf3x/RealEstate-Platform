@@ -10,5 +10,6 @@ namespace RealEstate.Application.DTOs
         public int UserId { get; set; }
         public decimal Balance { get; set; }
         public DateTime CreatedAt { get; set; }
+        public List<WalletTransactionDto> RecentTransactions { get; set; } = new();
     }
 }

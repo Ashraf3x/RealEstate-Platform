@@ -1,33 +1,99 @@
 ﻿@model RealEstate.Application.DTOs.WalletDto
 @{
-    Layout = "_Layout"; ViewData["Title"] = "My Wallet";
+    Layout = "_Layout";
+    ViewData["Title"] = "My Wallet";
 }
 
-<div class="mb-4">
-    <h1 class="page-title mb-1"><i class="fas fa-wallet me-2" style="font-size:1.3rem"></i>My Wallet</h1>
-</div>
+<div class="container-fluid">
+    <div class="mb-4">
+        <h1 class="page-title mb-1"><i class="fas fa-wallet me-2" style="font-size:1.3rem"></i>My Wallet</h1>
+        <p class="text-muted small">Manage your funds and track your real estate investments.</p>
+    </div>
 
-<div class="row g-3 mb-4">
-    <div class="col-md-5">
-        <div class="card-glass p-4">
-            <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:6px">Available Balance</div>
-            <div style="font-family:'Rajdhani',sans-serif;font-size:2.2rem;font-weight:700;color:var(--gold-light)">
-                @Model.Balance.ToString("N2") <span style="font-size:1rem;color:var(--text-muted)">EGP</span>
+    <div class="row g-4 mb-4">
+        <div class="col-lg-4">
+            <div class="card-glass p-4 h-100" style="background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(201,168,76,0.1) 100%); border: 1px solid rgba(201,168,76,0.2);">
+                <div class="d-flex justify-content-between align-items-start mb-4">
+                    <div style="font-size:0.8rem; color:var(--gold); font-weight:600; text-transform:uppercase; letter-spacing:1px;">Available Balance</div>
+                    <i class="fas fa-chip" style="font-size:1.5rem; color:rgba(255,255,255,0.2)"></i>
+                </div>
+                
+                <div class="mb-4">
+                    <span style="font-family:'Rajdhani',sans-serif; font-size:2.8rem; font-weight:700; color:#fff;">
+                        @Model.Balance.ToString("N2")
+                    </span>
+                    <span style="font-size:1.1rem; color:var(--gold-light); margin-left:5px">EGP</span>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-end mt-5">
+                    <div style="font-family: 'Courier New', monospace; color:rgba(255,255,255,0.4); letter-spacing:2px;">
+                    </div>
+                </div>
             </div>
-            <hr class="gold-divider" />
-            <div style="font-size:0.78rem;color:var(--text-muted)">Wallet #@Model.WalletId</div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="row g-3 h-100">
+                <div class="col-md-12">
+                    <div class="card-glass p-3 d-flex align-items-center justify-content-between">
+                        <div class="d-flex gap-2">
+                            <a asp-action="Deposit" asp-route-walletId="@Model.WalletId" class="btn btn-warning btn-sm px-4 fw-bold shadow-sm">
+                                <i class="fas fa-plus-circle me-1"></i> Deposit
+                            </a>
+                            <a asp-action="Withdraw" asp-route-walletId="@Model.WalletId" class="btn btn-outline-danger btn-sm px-4 fw-bold">
+                                <i class="fas fa-minus-circle me-1"></i> Withdraw
+                            </a>
+                        </div>
+                        <a asp-action="GetTransactions" asp-route-walletId="@Model.WalletId" class="btn btn-link text-gold text-decoration-none small">
+                            View All History <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="card-glass p-4" style="background: rgba(0,0,0,0.2)">
+                        <h6 class="mb-3 small text-muted text-uppercase" style="letter-spacing:1px">Recent Activity</h6>
+                        <div class="table-responsive">
+                            <table class="table table-borderless align-middle text-white mb-0">
+                                <thead>
+                                    <tr class="text-muted small" style="border-bottom: 1px solid rgba(255,255,255,0.05)">
+                                        <th>Type</th>
+                                        <th>Date</th>
+                                        <th class="text-end">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var tr in Model.RecentTransactions)
+                                    {
+                                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.03)">
+                                            <td>
+                                                @if (tr.Type == "Deposit")
+                                                {
+                                                    <span class="badge bg-success-subtle text-success p-2 rounded-circle me-2"><i class="fas fa-arrow-down"></i></span>
+                                                    <span>Deposit</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-danger-subtle text-danger p-2 rounded-circle me-2"><i class="fas fa-arrow-up"></i></span>
+                                                    <span>Withdrawal</span>
+                                                }
+                                            </td>
+                                            <td class="small text-muted">@tr.Timestamp.ToString("dd MMM, hh:mm tt")</td>
+                                            <td class="text-end fw-bold @(tr.Type == "Deposit" ? "text-success" : "text-danger")">
+                                                @(tr.Type == "Deposit" ? "+" : "-") @tr.Amount.ToString("N2")
+                                            </td>
+                                        </tr>
+                                    }
+                                    @if (!Model.RecentTransactions.Any())
+                                    {
+                                        <tr><td colspan="3" class="text-center p-4 text-muted small">No transactions found.</td></tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-
-<div class="d-flex gap-2">
-    <a asp-action="Deposit" asp-route-walletId="@Model.WalletId" class="btn-gold d-flex align-items-center gap-2" style="text-decoration:none;border-radius:8px;padding:9px 20px;font-size:0.87rem;font-weight:600">
-        <i class="fas fa-plus-circle"></i> Deposit
-    </a>
-    <a asp-action="Withdraw" asp-route-walletId="@Model.WalletId" style="background:rgba(220,53,69,0.15);border:1px solid rgba(220,53,69,0.3);color:#ff8080;border-radius:8px;padding:9px 20px;font-size:0.87rem;font-weight:600;text-decoration:none;display:flex;align-items:center;gap:6px">
-        <i class="fas fa-minus-circle"></i> Withdraw
-    </a>
-    <a asp-action="GetTransactions" asp-route-walletId="@Model.WalletId" class="btn-glass d-flex align-items-center gap-2" style="text-decoration:none;border-radius:8px;padding:9px 20px;font-size:0.87rem">
-        <i class="fas fa-list"></i> Transactions
-    </a>
 </div>
