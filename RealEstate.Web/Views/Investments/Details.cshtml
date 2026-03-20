@@ -104,7 +104,9 @@
                 <a asp-action="Create" class="btn btn-warning w-100 fw-bold py-2 mb-2 shadow-sm" style="text-decoration:none; display:block; text-align:center;">
                     <i class="fas fa-plus-circle me-1"></i> Buy More Shares
                 </a>
-                <a asp-action="Index" class="btn btn-outline-danger w-100 fw-bold py-2 border-opacity-25" style="font-size:0.85rem; text-decoration:none; display:block; text-align:center;">
+                <a asp-action="SellShares" asp-route-id="@Model.InvestmentId"
+                       class="btn btn-outline-danger w-100 fw-bold py-2 border-opacity-25"
+                       style="font-size:0.85rem; text-decoration:none; display:block; text-align:center;">
                     <i class="fas fa-exchange-alt me-1"></i> Sell Shares
                 </a>
             </div>

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Hosting;
 using RealEstate.Application.DTOs;
 using RealEstate.Domain.Entities;
 
@@ -9,17 +10,20 @@ namespace RealEstate.Web.Controllers
     [Authorize]
     public class ProfileController : Controller
     {
-        UserManager<User> userManager;
+        private readonly UserManager<User> _userManager;
+        private readonly IWebHostEnvironment _environment;
 
-        public ProfileController(UserManager<User> um)
+        public ProfileController(UserManager<User> um, IWebHostEnvironment environment)
         {
-            userManager = um;
+            _userManager = um;
+            _environment = environment;
         }
 
         public async Task<IActionResult> Index()
         {
-            var user = await userManager.GetUserAsync(User);
+            var user = await _userManager.GetUserAsync(User);
             if (user == null) return RedirectToAction("Login", "Account");
+
             var dto = new UserDto
             {
                 UserId = user.Id,
@@ -34,45 +38,35 @@ namespace RealEstate.Web.Controllers
             };
             return View(dto);
         }
+
         [HttpPost]
         public async Task<IActionResult> UpdateDetails(UserDto model)
         {
-            if (!ModelState.IsValid)
-            {
-                return View("Index", model);
-            }
+            if (!ModelState.IsValid) return View("Index", model);
 
-            var user = await userManager.GetUserAsync(User);
+            var user = await _userManager.GetUserAsync(User);
             if (user != null)
             {
                 user.FirstName = model.FirstName;
                 user.LastName = model.LastName;
-
-                await userManager.UpdateAsync(user);
+                await _userManager.UpdateAsync(user);
                 TempData["Success"] = "Profile updated successfully.";
             }
-
             return RedirectToAction("Index");
         }
 
         [HttpGet]
-        public IActionResult ChangePassword()
-        {
-            return View();
-        }
+        public IActionResult ChangePassword() => View();
 
         [HttpPost]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
+            if (!ModelState.IsValid) return View(model);
 
-            var user = await userManager.GetUserAsync(User);
+            var user = await _userManager.GetUserAsync(User);
             if (user != null)
             {
-                var result = await userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+                var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
                 if (result.Succeeded)
                 {
                     TempData["Success"] = "Password changed successfully.";
@@ -85,34 +79,35 @@ namespace RealEstate.Web.Controllers
             }
             return View(model);
         }
+
         [HttpPost]
-public async Task<IActionResult> UpdateProfile(UserDto model)
-{
-    var user = await userManager.FindByIdAsync(model.UserId.ToString());
-    if (user == null) return NotFound();
-
-    user.FirstName = model.FirstName;
-    user.LastName = model.LastName;
-    user.PhoneNumber = model.PhoneNumber;
-
-    if (model.ProfilePicture != null && model.ProfilePicture.Length > 0)
-    {
-        var folder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads/profiles");
-        if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
-
-        var fileName = Guid.NewGuid().ToString() + Path.GetExtension(model.ProfilePicture.FileName);
-        var filePath = Path.Combine(folder, fileName);
-
-        using (var stream = new FileStream(filePath, FileMode.Create))
+        public async Task<IActionResult> UpdateProfile(UserDto model)
         {
-            await model.ProfilePicture.CopyToAsync(stream);
+            var user = await _userManager.FindByIdAsync(model.UserId.ToString());
+            if (user == null) return NotFound();
+
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            user.PhoneNumber = model.PhoneNumber;
+
+            if (model.ProfilePicture != null && model.ProfilePicture.Length > 0)
+            {
+                var folder = Path.Combine(_environment.WebRootPath, "uploads", "profiles");
+                if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
+
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(model.ProfilePicture.FileName);
+                var filePath = Path.Combine(folder, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await model.ProfilePicture.CopyToAsync(stream);
+                }
+
+                user.ProfilePicturePath = "/uploads/profiles/" + fileName;
+            }
+
+            await _userManager.UpdateAsync(user);
+            return RedirectToAction("Index");
         }
-
-        user.ProfilePicturePath = "/uploads/profiles/" + fileName;
-    }
-
-    await userManager.UpdateAsync(user);
-    return RedirectToAction("Index");
-}
     }
 }
