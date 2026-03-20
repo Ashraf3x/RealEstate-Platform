@@ -3,13 +3,14 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using RealEstate.Application.DTOs;
 using RealEstate.Application.Services;
 using RealEstate.Domain.Entities;
+using System.Security.Claims;
 
 namespace RealEstate.Web.Controllers
 {
     public class InvestmentsController : Controller
     {
-        private readonly InvestmentService _investmentService;
-        private readonly PropertyService _propertyService;
+        InvestmentService _investmentService;
+        PropertyService _propertyService;
         public InvestmentsController(InvestmentService investmentService, PropertyService propertyService)
         {
             this._investmentService = investmentService;
@@ -17,8 +18,10 @@ namespace RealEstate.Web.Controllers
         }
         public IActionResult Index()
         {
-            var investmentsDtos = _investmentService.GetAll().Select(i => new InvestmentDto
-            {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+         var investmentsDtos = _investmentService.GetAll().Where(i => i.UserId == userId).Select(i => new InvestmentDto
+        {
                 InvestmentId = i.InvestmentId,
                 UserName = i.User.FirstName + " " + i.User.LastName,
                 ShareCount = i.ShareCount,
@@ -72,7 +75,7 @@ namespace RealEstate.Web.Controllers
                 {
                     var investment = new Investment
                     {
-                        UserId = createInvestmentDto.UserId,
+                        UserId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)),
                         PropertyId = createInvestmentDto.PropertyId,
                         ShareCount = createInvestmentDto.ShareCount,
                         PurchasedAt = DateTime.UtcNow,
@@ -114,7 +117,11 @@ namespace RealEstate.Web.Controllers
             {
                 return BadRequest();
             }
-            if (ModelState.IsValid)
+
+            ModelState.Remove("UserName");
+            ModelState.Remove("PropertyName");
+            ModelState.Remove("AppreciationStatus");
+            if (ModelState.IsValid) 
             {
                 var investment = _investmentService.GetById(id);
                 if (investment == null)
@@ -122,10 +129,23 @@ namespace RealEstate.Web.Controllers
                     return NotFound();
                 }
                 investment.ShareCount = investmentDto.ShareCount;
-                investment.OwnershipPercentage = (investmentDto.ShareCount / 1000m) * 100;
+
+                if (investment.Property != null && investment.Property.TotalShares > 0)
+                {
+                    investment.OwnershipPercentage = ((decimal)investmentDto.ShareCount / investment.Property.TotalShares) * 100;
+                }
+                else
+                {
+                    investment.OwnershipPercentage = ((decimal)investmentDto.ShareCount / 1000m) * 100;
+                }
+
                 _investmentService.Update(investment);
-                return RedirectToAction("Index");
+
+                return RedirectToAction("AdminIndex");
             }
+            var errors = ModelState.Values.SelectMany(v => v.Errors);
+            foreach (var err in errors) { Console.WriteLine(err.ErrorMessage); }
+
             return View("~/Views/Admin/Investments/Edit.cshtml", investmentDto);
         }
         [HttpGet]
@@ -210,6 +230,72 @@ namespace RealEstate.Web.Controllers
             }).ToList();
 
             return View("~/Views/Admin/Investments/Index.cshtml", investments);
+        }
+        [HttpGet]
+        public IActionResult ConfirmInvestment(int propertyId, int shares)
+        {
+            var property = _propertyService.GetById(propertyId);
+            if (property == null) return NotFound();
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) != null
+                         ? int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier))
+                         : 1;
+
+            var investment = new Investment
+            {
+                UserId = userId,
+                PropertyId = propertyId,
+                ShareCount = shares,
+                PurchasedAt = DateTime.UtcNow,
+                OwnershipPercentage = ((decimal)shares / property.TotalShares) * 100
+            };
+
+            _investmentService.Add(investment);
+
+            return RedirectToAction("Index");
+        }
+        [HttpGet]
+        public IActionResult SellShares(int id)
+        {
+            var investment = _investmentService.GetById(id);
+            if (investment == null) return NotFound();
+
+            var dto = new InvestmentDto
+            {
+                InvestmentId = investment.InvestmentId,
+                PropertyName = investment.Property.Title,
+                ShareCount = investment.ShareCount,
+                OwnershipPercentage = investment.OwnershipPercentage,
+                PurchasedAt = investment.PurchasedAt,
+                UserName = investment.User.FirstName + " " + investment.User.LastName
+            };
+            return View(dto);
+        }
+
+        [HttpPost]
+        public IActionResult SellShares(int id, int sharesToSell)
+        {
+            var investment = _investmentService.GetById(id);
+            if (investment == null) return NotFound();
+
+            if (sharesToSell <= 0 || sharesToSell > investment.ShareCount)
+            {
+                TempData["Error"] = "Invalid number of shares.";
+                return RedirectToAction("SellShares", new { id });
+            }
+
+            if (sharesToSell == investment.ShareCount)
+            {
+                _investmentService.Delete(investment);
+            }
+            else
+            {
+                investment.ShareCount -= sharesToSell;
+                investment.OwnershipPercentage = ((decimal)investment.ShareCount / investment.Property.TotalShares) * 100;
+                _investmentService.Update(investment);
+            }
+
+            return RedirectToAction("Index");
         }
     }
 }

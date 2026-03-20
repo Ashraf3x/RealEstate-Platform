@@ -1,0 +1,55 @@
+﻿@model RealEstate.Application.DTOs.ConfirmInvestmentViewModel
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Confirm Investment";
+}
+
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-5">
+                    <h3 class="fw-bold mb-4">Confirm Investment</h3>
+                    <hr />
+                    <div class="row g-3 mb-4">
+                        <div class="col-6">
+                            <div class="bg-light rounded p-3 text-center">
+                                <p class="text-muted small mb-1">Property</p>
+                                <h5 class="fw-bold mb-0">@Model.PropertyTitle</h5>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="bg-light rounded p-3 text-center">
+                                <p class="text-muted small mb-1">Shares</p>
+                                <h5 class="fw-bold mb-0">@Model.Shares</h5>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="bg-light rounded p-3 text-center">
+                                <p class="text-muted small mb-1">Price Per Share</p>
+                                <h5 class="fw-bold mb-0">$@Model.PricePerShare</h5>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="bg-light rounded p-3 text-center">
+                                <p class="text-muted small mb-1">Total Cost</p>
+                                <h5 class="fw-bold mb-0">$@Model.TotalCost</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <form method="post">
+                        <input type="hidden" name="PropertyId" value="@Model.PropertyId" />
+                        <input type="hidden" name="Shares" value="@Model.Shares" />
+                        <input type="hidden" name="PricePerShare" value="@Model.PricePerShare" />
+                        <input type="hidden" name="TotalCost" value="@Model.TotalCost" />
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-success flex-grow-1">Confirm & Invest</button>
+                            <a asp-action="Index" asp-controller="SaleListings" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

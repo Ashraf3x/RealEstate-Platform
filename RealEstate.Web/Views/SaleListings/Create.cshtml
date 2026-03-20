@@ -1,6 +1,6 @@
 ﻿@model RealEstate.Application.DTOs.CreateSaleListingDto
 @{
-    Layout = "_Layout";
+    Layout = ViewData["Layout"]?.ToString() ?? "_Layout";
     ViewData["Title"] = "New Listing";
 }
 
