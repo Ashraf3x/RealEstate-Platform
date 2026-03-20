@@ -50,6 +50,8 @@ namespace RealEstate.Web.Controllers
 
         public IActionResult Create()
         {
+            ViewData["Layout"] = User.IsInRole("Admin") ? "_AdminLayout" : "_Layout";
+
             var properties = property.GetAll();
             ViewBag.Properties = new SelectList(properties, "PropertyId", "Title");
             return View();
@@ -58,6 +60,13 @@ namespace RealEstate.Web.Controllers
         [HttpPost]
         public IActionResult Create(CreateSaleListingDto dto)
         {
+            if (!ModelState.IsValid)
+            {
+                ViewData["Layout"] = User.IsInRole("Admin") ? "_AdminLayout" : "_Layout";
+                ViewBag.Properties = new SelectList(property.GetAll(), "PropertyId", "Title");
+                return View(dto);
+            }
+
             var listing = new SaleListing
             {
                 PropertyId = dto.PropertyId,
@@ -65,7 +74,12 @@ namespace RealEstate.Web.Controllers
                 Quantity = dto.Quantity,
                 Status = dto.Status
             };
+
             service.Add(listing);
+            if (User.IsInRole("Admin"))
+            {
+                return RedirectToAction("AdminIndex");
+            }
             return RedirectToAction("Index");
         }
 

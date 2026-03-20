@@ -15,7 +15,7 @@
         <div style="color:var(--text-muted);margin-top:6px">Property</div>
         <div style="font-weight:600">@Model.PropertyName</div>
     </div>
-    <form asp-action="Edit" method="post">
+    <form asp-action="Edit" asp-route-id="@Model.InvestmentId" method="post">
         <input type="hidden" asp-for="InvestmentId" />
         <input type="hidden" asp-for="UserName" />
         <input type="hidden" asp-for="PropertyName" />

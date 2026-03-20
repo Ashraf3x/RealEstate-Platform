@@ -14,6 +14,7 @@ namespace RealEstate.Application.DTOs
         public DateTime PurchasedAt { set; get; }
         public decimal AnnualYield { get; set; }
         public int OccupancyRate { get; set; }
+        public int PropertyId { get; set; }
         public string AppreciationStatus { get; set; }
         public int AppreciationProgress { get; set; }
     }
