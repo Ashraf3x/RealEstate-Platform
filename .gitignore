@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 
 RealEstate.Web/appsettings.json
+RealEstate.Web/appsettings.Development.json
